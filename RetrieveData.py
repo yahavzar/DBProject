@@ -2,7 +2,7 @@ import urllib
 import urllib.parse
 import urllib.request
 import json
-import Movie
+from Movie import Movie
 
 def main():
     NUM_OF_MOVIES = 1
@@ -16,13 +16,9 @@ def main():
         try:
             req = urllib.request.urlopen(full_url).read()
             js = json.loads(req)
-            print("adultttt ==== ",js["adult"])
-            Movie.printMovie(10)
-            movie = Movie.Movie(js["adult"])
-            # movie = Movie(js["adult"], js["belongs_to_collection"], js["budget"], js["genres"], js["homepage"], js["id"], js["imdb_id"], js["original_title"]
-            #               ,js["original_language"], js["overview"], js["popularity"], js["release_date"], js["revenue"], js["runtime"],
-            #               js["spoken_languages"], js["status"], js["vote_count"], js["vote_average"])
-            print("here2")
+            movie = Movie(js["adult"], js["belongs_to_collection"], js["budget"], js["genres"], js["homepage"], js["id"], js["imdb_id"], js["original_title"]
+                          ,js["original_language"], js["overview"], js["popularity"], js["release_date"], js["revenue"], js["runtime"],
+                          js["spoken_languages"], js["status"], js["vote_count"], js["vote_average"])
             movies.append(movie)
             print("success")
             NUM_OF_MOVIES -= 1
@@ -31,7 +27,6 @@ def main():
             pass
         id += 1
 
-    print(movies[0])
 
 
 
