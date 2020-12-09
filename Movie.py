@@ -2,13 +2,6 @@ class Movie:
   def printMovie(self):
     print("hello i am movie")
 
-  def __init__(self):
-    return
-
-  def __init__(self, adult):
-      print("HERE")
-      self.adult = adult
-
   def __init__(self, adult, collection, budget, genre, homepage, api_id, imdb_id, original_language, title, overview,
                popularity, release_date, revenue, runtime, spoken_languages, status, vote_count, vote_avg):
       print("constructor")
@@ -33,24 +26,25 @@ class Movie:
 
 
   def __repr__(self):
-    print(self.adult, "\n",
-          self.collection, "\n",
-          self.budget, "\n",
-          self.genre, "\n",
-          self.homepage, "\n",
-          self.api_id, "\n",
-          self.imdb_id, "\n",
-          self.original_language, "\n",
-          self.title, "\n",
-          self.overview, "\n",
-          self.popularity, "\n",
-          self.release_date, "\n",
-          self.revenue, "\n",
-          self.runtime, "\n",
-          self.spoken_languages, "\n",
-          self.status, "\n",
-          self.vote_count, "\n",
-          self.vote_avg, "\n")
+    x = str(self.adult) + "\n" + \
+        str(self.collection) + "\n" + \
+        str(self.budget) + "\n" + \
+        str(self.genre) + "\n" + \
+        str(self.homepage) + "\n" + \
+        str(self.api_id) + "\n" + \
+        str(self.imdb_id) + "\n" + \
+        str(self.original_language) + "\n" + \
+        str(self.title) + "\n" + \
+        str(self.overview) + "\n" + \
+        str(self.popularity) + "\n" + \
+        str(self.release_date) + "\n" + \
+        str(self.revenue) + "\n" + \
+        str(self.runtime) + "\n" + \
+        str(self.spoken_languages) + "\n" + \
+        str(self.status) + "\n" + \
+        str(self.vote_count) + "\n" + \
+        str(self.vote_avg) + "\n"
+    return x
 
 
 def printMovie(param):
