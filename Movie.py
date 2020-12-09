@@ -1,10 +1,8 @@
 class Movie:
   def printMovie(self):
-    print("hello i am movie")
-
+    pass
   def __init__(self, adult, collection, budget, genre, homepage, api_id, imdb_id, original_language, title, overview,
                popularity, release_date, revenue, runtime, spoken_languages, status, vote_count, vote_avg):
-      print("constructor")
       self.adult = adult
       self.collection = collection
       self.budget = budget

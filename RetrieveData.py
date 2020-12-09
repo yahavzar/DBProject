@@ -12,7 +12,6 @@ def main():
     id = 0
     while NUM_OF_MOVIES > 0:
         full_url = start_url + str(id) + end_url
-        print(full_url)
         try:
             req = urllib.request.urlopen(full_url).read()
             js = json.loads(req)
@@ -20,10 +19,8 @@ def main():
                           ,js["original_language"], js["overview"], js["popularity"], js["release_date"], js["revenue"], js["runtime"],
                           js["spoken_languages"], js["status"], js["vote_count"], js["vote_average"])
             movies.append(movie)
-            print("success")
             NUM_OF_MOVIES -= 1
         except:
-            print("failed")
             pass
         id += 1
 
