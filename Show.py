@@ -1,18 +1,14 @@
-from Media import Media
+from Media import  *
+class Show(Media):
+  def __init__(self, genre, homepage, api_id, original_language, title, overview,
+               popularity, release_date, runtime, spoken_languages, status, vote_count, vote_avg,seasons,last_episode,next_episode,creators):
+    super().__init__(genre, homepage, api_id, original_language, title, overview,
+                       popularity, release_date, runtime, spoken_languages, status, vote_count, vote_avg)
+    self.seasons=seasons
+    self.last_episode=last_episode
+    self.next_episode=next_episode
+    self.creators=creators
 
-
-class Movie(Media):
-  def printMovie(self):
-    pass
-  def __init__(self, adult, collection, budget, genre, homepage, api_id, imdb_id, original_language, title, overview,
-               popularity, release_date, revenue, runtime, spoken_languages, status, vote_count, vote_avg):
-      super().__init__( genre, homepage, api_id, original_language, title, overview,
-               popularity, release_date, runtime, spoken_languages, status, vote_count, vote_avg)
-      self.adult = adult
-      self.collection = collection
-      self.budget = budget
-      self.imdb_id = imdb_id
-      self.revenue = revenue
 
 
   # def __repr__(self):
@@ -35,7 +31,3 @@ class Movie(Media):
   #       str(self.vote_count) + "\n" + \
   #       str(self.vote_avg) + "\n"
   #   return x
-
-
-def printMovie(param):
-  return None

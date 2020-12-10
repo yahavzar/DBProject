@@ -3,12 +3,13 @@ import urllib.parse
 import urllib.request
 import json
 from Movie import Movie
+from Show import Show
 import requests
 
-def fetch_movie:
+def fetch_movie():
     url = "https://api.themoviedb.org/3/discover/movie"
     movies = []
-    for i in range(1, 501):
+    for i in range(1, 2):
         data = {'api_key': 'd005091db9214b502565db95dea43fc7',
                 'page': str(i)}
         req = requests.get(url, data)
@@ -18,36 +19,38 @@ def fetch_movie:
             data = {'api_key': 'd005091db9214b502565db95dea43fc7'}
             req = requests.get(movie_url, data)
             js = req.json()
-            movie = Movie(js["adult"], js["belongs_to_collection"], js["budget"], js["genres"], js["homepage"],
-                          js["id"], js["imdb_id"], js["original_title"]
-                          , js["original_language"], js["overview"], js["popularity"], js["release_date"],
-                          js["revenue"], js["runtime"],
-                          js["spoken_languages"], js["status"], js["vote_count"], js["vote_average"])
+            movie=Movie(js["adult"], js["belongs_to_collection"], js["budget"]
+                        , js["genres"] ,js["homepage"], js["id"], js["imdb_id"],
+             js["original_language"],js["original_title"], js["overview"], js["popularity"]
+                        , js["release_date"], js["revenue"]
+            , js["runtime"], js["spoken_languages"]
+            , js["status"], js["vote_count"], js["vote_average"])
             movies.append(movie)
+    return  movies
 
-def fetch_TV_Show:
-    url = "https://api.themoviedb.org/3/discover/movie"
-    movies = []
-    for i in range(1, 501):
+def fetch_TV_Show():
+    url = "https://api.themoviedb.org/3/discover/tv"
+    shows = []
+    for i in range(1, 2):
         data = {'api_key': 'd005091db9214b502565db95dea43fc7',
                 'page': str(i)}
         req = requests.get(url, data)
-        movie_list = req.json()['results']
-        for movie in movie_list:
-            movie_url = f"https://api.themoviedb.org/3/movie/{movie['id']}"
+        show_list = req.json()['results']
+        for show in show_list:
+            movie_url = f"https://api.themoviedb.org/3/tv/{show['id']}"
             data = {'api_key': 'd005091db9214b502565db95dea43fc7'}
             req = requests.get(movie_url, data)
             js = req.json()
-            movie = Movie(js["adult"], js["belongs_to_collection"], js["budget"], js["genres"], js["homepage"],
-                          js["id"], js["imdb_id"], js["original_title"]
-                          , js["original_language"], js["overview"], js["popularity"], js["release_date"],
-                          js["revenue"], js["runtime"],
-                          js["spoken_languages"], js["status"], js["vote_count"], js["vote_average"])
-            movies.append(movie)
+            show = Show(js["genres"], js["homepage"],js["id"]
+            ,js["original_language"],js["name"], js["overview"], js["popularity"]
+                , js["first_air_date"],js["episode_run_time"],js["spoken_languages"]
+                ,js["status"], js["vote_count"], js["vote_average"],js["seasons"],js["last_episode_to_air"],js["next_episode_to_air"],js["created_by"])
+            shows.append(show)
+    return shows
 
 def main():
-      fetch_movie()
-      fetch_TV_Show()
+      movies=fetch_movie()
+      shows =fetch_TV_Show()
       print("hi")
 
 
