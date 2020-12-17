@@ -8,7 +8,10 @@ class Media:
       self.title = title
       self.overview = overview
       self.popularity = popularity
-      self.release_date = release_date
+      if release_date == '':
+          self.release_date=None
+      else:
+          self.release_date = release_date
       self.runtime = runtime
       self.spoken_languages = spoken_languages
       self.status = status

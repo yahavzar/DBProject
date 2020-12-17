@@ -7,10 +7,10 @@ def CreateTables():
     ##shows = RetrieveData.fetch_TV_Show()
 
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",port=3305)
-
+    count=0
     movies = RetrieveData.fetch_movie()
     for movie in movies:
-        # try:
+         try:
             # Create a cursor object
             cursorObject = connectionObject.cursor()
 
@@ -27,17 +27,12 @@ def CreateTables():
 
             cursorObject.execute(sqlQueryMovie, values)
             connectionObject.commit()
+         except Exception as e:
+            print("Exeception occured:{}".format(e))
+            count+=1
+            continue
 
 
-            # Fetch all the rows
-
-            rows = cursorObject.fetchall()
-
-            for row in rows:
-                print(row)
-
-        # except Exception as e:
-        #
-        #     print("Exeception occured:{}".format(e))
+    print("number of failed is %d",count)
 
 
