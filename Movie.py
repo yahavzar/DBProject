@@ -10,7 +10,10 @@ class Movie(Media):
       super().__init__( genre, homepage, api_id, original_language, title, overview,
                popularity, release_date, runtime, spoken_languages, status, vote_count, vote_avg)
       self.adult = adult
-      self.collection = collection
+      if (collection!= None):
+        self.collection = collection['name']
+      else:
+        self.collection = None
       self.budget = budget
       self.imdb_id = imdb_id
       self.revenue = revenue
