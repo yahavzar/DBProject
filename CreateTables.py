@@ -10,27 +10,22 @@ def CreateTables():
 
     movies = RetrieveData.fetch_movie()
     for movie in movies:
-        try:
+        # try:
             # Create a cursor object
             cursorObject = connectionObject.cursor()
 
             # SQL query string
             sqlQueryMovie = "INSERT INTO Movie (apiId,title,langId,releaseDay,length,budget," \
                             "revenue,collection,imdbId,homePage,status,popularity,voteCount,voteAvg,adult) " \
-                            "VALUES (%d,%) "
-            sqlQueryMovie = sqlQueryMovie +
+                            "VALUES (%d, %s, %d, %s, %d, %d, %d, %s, %s, %s, %s, %f, %d, %f, %b)"
+            values = (movie.api_id, movie.title, 0, None, movie.runtime, movie.budget, movie.revenue
+                      ,movie.collection, movie.imdb_id, movie.homepage, movie.status, movie.popularity, movie.vote_count, movie.vote_avg, movie.adult)
             sqlQueryGenre = "INSERT INTO"
             # Execute the sqlQuery
 
-            cursorObject.execute(sqlQuery)
+            cursorObject.execute(sqlQueryMovie, values)
+            connectionObject.commit()
 
-            # SQL query string
-
-            sqlQuery = "show tables"
-
-            # Execute the sqlQuery
-
-            cursorObject.execute(sqlQuery)
 
             # Fetch all the rows
 
@@ -39,10 +34,8 @@ def CreateTables():
             for row in rows:
                 print(row)
 
-        except Exception as e:
+        # except Exception as e:
+        #
+        #     print("Exeception occured:{}".format(e))
 
-            print("Exeception occured:{}".format(e))
 
-        finally:
-
-            connectionObject.close()

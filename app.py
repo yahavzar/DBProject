@@ -1,4 +1,5 @@
 import RetrieveData
+import CreateTables
 from flask import Flask
 import pymysql
 
@@ -11,4 +12,5 @@ def test():
 
 
 if __name__ == '__main__':
-   print("hi")
+    CreateTables.CreateTables()
+    print("Done")
