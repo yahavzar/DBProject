@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # for i in range (1,10):
     #     row = cur.fetchone()
     #     print (row[0],row[1])
-    connectionObject    = pymysql.connect(host="127.0.0.1",user="DbMysql03", password="DbMysql03",db="DbMysql03",port=3305)
+    connectionObject = pymysql.connect(host="127.0.0.1",user="DbMysql03", password="DbMysql03",db="DbMysql03",port=3305)
 
     try:
 
