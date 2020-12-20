@@ -29,7 +29,7 @@ languageName varchar(32)
 
 create TABLE IF NOT EXISTS Actors(
 actorId int PRIMARY KEY,
-actorName varchar(32),
+actorName varchar(64),
 gender int
 );
 
@@ -66,19 +66,18 @@ overview varchar(1024)
 
 create TABLE IF NOT EXISTS Shows(
 apiId int PRIMARY KEY,
-title varchar(32),
+title varchar(128),
 langId int,
 releaseDay DATETIME,
 length int,
-homePage varchar(64),
+homePage varchar(256),
 status varchar(32),
 popularity float,
 voteCount int,
 voteAvg float,
-adult boolean,
 seasons int,
 lastEpisodeId int,
-prevEpisodeId int
+nextEpisodeId int
 );
 
 create TABLE IF NOT EXISTS Episode(
@@ -122,5 +121,5 @@ showId int
 
 create TABLE IF NOT EXISTS ShowOverview(
 showId int PRIMARY KEY,
-overview varchar(1024)
+overview varchar(2048)
 );

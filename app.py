@@ -12,5 +12,10 @@ def test():
 
 
 if __name__ == '__main__':
-    CreateTables.CreateTables()
-    print("Done")
+    #CreateTables.InsertToTables()
+    #connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",port=3305)
+    #CreateTables.updateMovies(connectionObject)
+    #RetrieveData.fetchDirectors()
+    #RetrieveData.fetchGenreSpokenlang()
+    #RetrieveData.fetchActorDirector()
+    RetrieveData.fetch_TV_Show()
