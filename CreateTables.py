@@ -235,6 +235,7 @@ def insertMovieSpokenLang(connectionObject, languageId, movieId):
     cursorObject.execute(sqlQuery, values)
     connectionObject.commit()
 
+
 def insertShowSpokenLang(connectionObject, languageId, showId):
     cursorObject = connectionObject.cursor()
     sqlQuery = "SELECT * FROM Language"
