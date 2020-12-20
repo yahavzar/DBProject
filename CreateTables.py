@@ -31,6 +31,14 @@ def InsertMovies(connectionObject):
 
     print("number of failed is ", count)
 
+def InsertShowActors(connectionObject, showId, actorId):
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "INSERT INTO ActorsShow (actorId, showId) VALUES (%s,%s)"
+    values = (actorId, showId)
+    cursorObject.execute(sqlQuery, values)
+    connectionObject.commit()
+
+
 def InsertShow(connectionObject,Show):
     cursorObject = connectionObject.cursor()
     sqlQuery = "SELECT * FROM Language"
@@ -41,7 +49,7 @@ def InsertShow(connectionObject,Show):
         lang[row[0]] = row[1]
     cursorObject = connectionObject.cursor()
     sqlQuery = "INSERT INTO Shows (apiId,title,langId,releaseDay,length,homePage,status,popularity,voteCount,voteAvg,seasons,lastEpisodeId,nextEpisodeId) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-    langId=get_key(lang,Show.original_language)
+    langId = get_key(lang,Show.original_language)
     if (langId==None):
         cursorObject = connectionObject.cursor()
         sqlQuery = "INSERT INTO Language (languageId,languageName) VALUES (%s,%s)"
@@ -53,6 +61,7 @@ def InsertShow(connectionObject,Show):
     values = (Show.api_id, Show.title,langId,Show.release_date,Show.runtime,Show.homepage,Show.status,Show.popularity,Show.vote_count,Show.vote_avg,Show.seasons,Show.last_episode,Show.next_episode)
     cursorObject.execute(sqlQuery, values)
     connectionObject.commit()
+
 def InsertToLang(connectionObject):
     language= RetrieveData.fetchLanguage()
     for lang in language :

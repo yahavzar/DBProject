@@ -128,6 +128,7 @@ def fetchLanguage():
 def fetchActors():
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
                                        port=3305)
+
     url = "https://api.themoviedb.org/3/discover/movie"
     actors = {}
     for i in range(1, 501):
@@ -154,11 +155,44 @@ def fetchActors():
                 print("Exeception occured:{}".format(e))
 
 
+def fetchCreditsActors():
+    connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
+                                       port=3305)
+    url = "https://api.themoviedb.org/3/discover/tv"
+
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "SELECT * FROM Actors"
+    cursorObject.execute(sqlQuery)
+    rows = cursorObject.fetchall()
+    actors = {}
+    for row in rows:
+        actors[row[0]] = row[1]
+    for i in range(2,501):
+        print("Start page ", i)
+        data = {'api_key': 'd005091db9214b502565db95dea43fc7','page': str(i)}
+        req = requests.get(url, data)
+        tv_list = req.json()['results']
+        for tv in tv_list:
+            tv_url = f"https://api.themoviedb.org/3/movie/{tv['id']}/credits?api_key=d005091db9214b502565db95dea43fc7"
+            req = requests.get(tv_url, data)
+            try:
+                js = req.json()
+                for a in js["cast"]:
+                    if a["known_for_department"] == "Acting":
+                        if a["id"] in actors:
+                            pass
+                        else:
+                            actors[a["id"]] = a["name"]
+                            CreateTables.insertActors(connectionObject, a["id"],a["name"],a["gender"])
+                        CreateTables.InsertShowActors(connectionObject, js["id"], a["id"])
+
+            except Exception as e:
+                print("Exeception occured:{}".format(e))
+
 def fetchGenreOverview():
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
                                        port=3305)
     url = "https://api.themoviedb.org/3/discover/movie"
-    movies = []
     genres = {}
     for i in range(110, 501):
         data = {'api_key': 'd005091db9214b502565db95dea43fc7',
@@ -191,8 +225,7 @@ def fetchDirectors():
     directors = {}
     for i in range(1, 501):
         print("Start page ", i)
-        data = {'api_key': 'd005091db9214b502565db95dea43fc7',
-                'page': str(i)}
+        data = {'api_key': 'd005091db9214b502565db95dea43fc7', 'page': str(i)}
         req = requests.get(url, data)
         movie_list = req.json()['results']
         for movie in movie_list:
