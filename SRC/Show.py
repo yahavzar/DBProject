@@ -1,4 +1,4 @@
-from Media import  *
+from SRC.Media import  *
 class Show(Media):
   def __init__(self, genre, homepage, api_id, original_language, title, overview,
                popularity, release_date, runtime, spoken_languages, status, vote_count, vote_avg,seasons,last_episode,next_episode,creators):

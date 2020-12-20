@@ -80,20 +80,6 @@ lastEpisodeId int,
 nextEpisodeId int
 );
 
-create TABLE IF NOT EXISTS Episode(
-apiId int ,
-episodeId int,
-PRIMARY KEY(apiId,episodeId),
-episodeNum int,
-episodeName varchar(32),
-seasonsNum int
-);
-
-create TABLE IF NOT EXISTS EpisodeOverview(
-episodeId int PRIMARY KEY,
-overview varchar(1024)
-);
-
 create TABLE IF NOT EXISTS ShowGenre(
 genreId int,
 apiId int
