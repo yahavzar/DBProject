@@ -14,4 +14,4 @@ def test():
 if __name__ == '__main__':
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
                                        port=3305)
-    YahavQuery.recommended_foreign_language(connectionObject)
+    RetrieveData.fetch_Credits_TV_shows()

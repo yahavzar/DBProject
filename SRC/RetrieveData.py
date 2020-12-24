@@ -202,7 +202,7 @@ def fetch_Credits_TV_shows():
         req = requests.get(url, data)
         tv_list = req.json()['results']
         for tv in tv_list:
-            tv_url = f"https://api.themoviedb.org/3/movie/{tv['id']}/credits?api_key=d005091db9214b502565db95dea43fc7"
+            tv_url = f"https://api.themoviedb.org/3/tv/{tv['id']}/credits?api_key=d005091db9214b502565db95dea43fc7"
             req = requests.get(tv_url, data)
             try:
                 js = req.json()
@@ -257,11 +257,11 @@ def fetch_Credits_movies():
                 print("Exeception occured:{}".format(e))
 
 def fetch_Data():
-    fetch_movie()
-    fetch_Credits_movies()
+    #fetch_movie()
+    #fetch_Credits_movies()
     fetch_Credits_TV_shows()
-    fetch_TV_Show()
-    fetch_Credits_TV_shows()
+    #fetch_TV_Show()
+    #fetch_Credits_TV_shows()
 
 
 

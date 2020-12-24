@@ -97,7 +97,8 @@ producerName varchar(32)
 
 create TABLE IF NOT EXISTS ActorsShow(
 actorId int,
-showId int
+showId int,
+PRIMARY key (actorId,showId)
 );
 
 create TABLE IF NOT EXISTS ProducersShow(
