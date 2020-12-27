@@ -187,7 +187,7 @@ ALTER TABLE Actors ADD INDEX id (actorId);
 ALTER TABLE ActorsMovie ADD INDEX filmId (filmId);
 ALTER TABLE ActorsShow ADD INDEX showId (showId);
 ALTER TABLE DirectorsMovie ADD INDEX filmId (filmId);
-ALTER TABLE Movie ADD INDEX langId (langId);
+ALTER TABLE Movie ADD INDEX langID (langId);
 ALTER TABLE Movie ADD INDEX id (apiId);
 ALTER TABLE Shows ADD INDEX langId (langId);
 ALTER TABLE Shows ADD INDEX id (apiId);
