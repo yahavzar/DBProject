@@ -37,11 +37,16 @@ gender int
 create TABLE IF NOT EXISTS MoviesGenre(
 genreId int,
 apiId int
+PRIMARY key (genreId,apiId)
+
+
 );
 
 create TABLE IF NOT EXISTS LanguageMovie(
 languageId int,
 movieId int
+PRIMARY key (languageId,movieId)
+
 );
 
 create TABLE IF NOT EXISTS Directors(
@@ -52,11 +57,14 @@ directorName varchar(32)
 create TABLE IF NOT EXISTS ActorsMovie(
 actorId int,
 filmId int
+PRIMARY key (actorId,filmId)
+
 );
 
 create TABLE IF NOT EXISTS DirectorsMovie(
 directorId int,
 filmId int
+PRIMARY key (directorId,filmId)
 );
 
 create TABLE IF NOT EXISTS MovieOverview(
@@ -83,11 +91,15 @@ nextEpisodeId int
 create TABLE IF NOT EXISTS ShowGenre(
 genreId int,
 apiId int
+PRIMARY key (genreId,apiId)
+
 );
 
 create TABLE IF NOT EXISTS LanguageShow(
 languageId int,
 showId int
+PRIMARY key (languageId,showId)
+
 );
 
 create TABLE IF NOT EXISTS Producers(
@@ -103,10 +115,92 @@ PRIMARY key (actorId,showId)
 
 create TABLE IF NOT EXISTS ProducersShow(
 producerId int,
-showId int
+showId int,
+PRIMARY key (producerId,showId)
+
 );
 
 create TABLE IF NOT EXISTS ShowOverview(
 showId int PRIMARY KEY,
 overview varchar(2048)
 );
+--====================================================================================================================--
+-- 2) Adding foreign keys
+--====================================================================================================================--
+ALTER TABLE ActorsMovie
+ADD FOREIGN KEY (actorId) REFERENCES Actors(actorId);
+
+ALTER TABLE ActorsShow
+ADD FOREIGN KEY (actorId) REFERENCES Actors(actorId);
+
+ALTER TABLE DirectorsMovie
+ADD FOREIGN KEY (directorId) REFERENCES Directors(directorId);
+
+ALTER TABLE DirectorsMovie
+ADD FOREIGN KEY (filmId) REFERENCES Movie(apiid);
+
+
+
+ALTER TABLE LanguageMovie
+ADD FOREIGN KEY (languageId) REFERENCES Language(languageId);
+
+ALTER TABLE LanguageShow
+ADD FOREIGN KEY (showId) REFERENCES Shows(apiId);
+
+ALTER TABLE LanguageShow
+ADD FOREIGN KEY (languageId) REFERENCES Language(languageId);
+
+ALTER TABLE Movie
+ADD FOREIGN KEY (langId) REFERENCES Language(languageId);
+
+ALTER TABLE Shows
+ADD FOREIGN KEY (langId) REFERENCES Language(languageId);
+
+ALTER TABLE MovieOverview
+ADD FOREIGN KEY (filmId) REFERENCES Movie(apiid);
+
+ALTER TABLE MoviesGenre
+ADD FOREIGN KEY (apiId) REFERENCES Movie(apiid);
+
+ALTER TABLE MoviesGenre
+ADD FOREIGN KEY (genreId) REFERENCES Genre(genreId);
+
+ALTER TABLE ProducersShow
+ADD FOREIGN KEY (producerId) REFERENCES Producers(producerId);
+
+ALTER TABLE ProducersShow
+ADD FOREIGN KEY (showId) REFERENCES Shows(apiid);
+
+ALTER TABLE ShowGenre
+ADD FOREIGN KEY (apiId) REFERENCES Shows(apiid);
+
+ALTER TABLE ShowGenre
+ADD FOREIGN KEY (genreId) REFERENCES Genre(genreId);
+
+
+ALTER TABLE ShowOverview
+ADD FOREIGN KEY (showId) REFERENCES Shows(apiid);
+--====================================================================================================================--
+-- 4) Adding indices
+--====================================================================================================================--
+ALTER TABLE Actors ADD INDEX id (actorId);
+ALTER TABLE ActorsMovie ADD INDEX filmId (filmId);
+ALTER TABLE ActorsShow ADD INDEX showId (showId);
+ALTER TABLE DirectorsMovie ADD INDEX filmId (filmId);
+ALTER TABLE Movie ADD INDEX langId (langId);
+ALTER TABLE Movie ADD INDEX id (apiId);
+ALTER TABLE Shows ADD INDEX langId (langId);
+ALTER TABLE Shows ADD INDEX id (apiId);
+
+
+
+
+
+
+
+
+
+
+
+
+

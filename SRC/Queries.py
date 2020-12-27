@@ -127,25 +127,7 @@ def recommended_actor_by_genre(connectionObject):
         print(row[0],"\t",row[1],'\t',row[2],'\n')
     return rows
 
-def recommended_actor_by_genre(connectionObject):
-    ## (query 2)
-    GenreName=input("enter Genre Name: ")
-    voteavg=input("enter vote avg: ")
-    cursorObject = connectionObject.cursor()
-    sqlQuery = "select a.actorId, a.actorName , count(*) from Actors a, MoviesGenre mg, Movie m ," \
-               " ActorsMovie am , Genre g , (select Genre.genreId as id from Genre where" \
-               " genreName=%s) AS temp, (select g.genreId,g.genreName,avg(voteCount) as" \
-               " avgvotecount from Movie m , Genre g, MoviesGenre mg where m.apiId=mg.apiId " \
-               "and g.genreId=mg.genreId group by g.genreId ) as GenreAvgVoteCount where" \
-               " m.apiId=mg.apiId and a.actorId=am.actorId and am.filmId=m.apiId and g.genreName=%s " \
-               "and  temp.id=mg.genreId and  m.voteCount>GenreAvgVoteCount.avgvotecount and m.voteAvg>%s" \
-               " and temp.id= GenreAvgVoteCount.genreId group by a.actorId order by -count(*)"
-    values = (GenreName,GenreName,voteavg)
-    cursorObject.execute(sqlQuery,values)
-    rows = cursorObject.fetchall()
-    for row in rows:
-        print(row[0],"\t",row[1],'\t',row[2],'\n')
-    return rows
+
 
 def recommended_foreign_language(connectionObject):
     ## (query 11)
