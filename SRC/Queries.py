@@ -108,7 +108,6 @@ def active_and_success_actor(connectionObject):
 
 
 def recommended_actor_by_genre(connectionObject):
-    ## (query 2)
     GenreName=input("enter Genre Name: ")
     voteavg=input("enter vote avg: ")
     cursorObject = connectionObject.cursor()
@@ -162,11 +161,11 @@ def similar_movie(connectionObject):
                "count(*) as count FROM Movie as m, Movie as m2, Actors as a, ActorsMovie as am, " \
                "ActorsMovie as am2 WHERE m.apiId=%s AND am.filmId<>am2.filmId AND am.filmId=m.apiId" \
                " AND am.actorId=a.actorId AND am2.filmId=m2.apiId AND am.actorId=am2.actorId AND" \
-               " m.langId=m2.langId GROUP BY m2.apiId) as commonMovie  , (SELECT distinct m2.apiId " \
+               " m.langId=m2.langId GROUP BY m2.apiId,m2.title) as commonMovie  , (SELECT distinct m2.apiId " \
                "as id, m2.title as title, count(*) as count FROM Movie as m, Movie as m2, Genre as g" \
                ", MoviesGenre as mg, MoviesGenre as mg2 WHERE m.apiId=%s AND mg.apiId<>mg2.apiId AND " \
                "mg.apiId=m.apiId AND mg.genreId=g.genreId AND mg2.apiId=m2.apiId AND mg.genreId=mg2.genreId " \
-               "GROUP BY m2.apiId) as commonGenre , Movie m1 where commonMovie.count >4 and commonGenre.count>2" \
+               "GROUP BY m2.apiId,m2.title) as commonGenre , Movie m1 where commonMovie.count >4 and commonGenre.count>2" \
                " and m1.apiId=commonMovie.id and m1.apiId=commonGenre.id"
     values = (apiId,apiId)
     cursorObject.execute(sqlQuery, values)
@@ -208,20 +207,20 @@ def similar_Show_To_Movie(connectionObject):
     ##query 1
     title = input("enter title : ")
     cursorObject = connectionObject.cursor()
-    sqlQuery = "select Shows.apiId from Movie where Shows.title=%s"
+    sqlQuery = "select Shows.apiId from Shows where Shows.title=%s"
     values = (title)
     cursorObject.execute(sqlQuery, values)
     rows = cursorObject.fetchall()
     for row in rows:
         apiId= row[0]
-    sqlQuery ="SELECT distinct countActors.titleFROM (SELECT m2.apiId as id, m2.title as title, " \
+    sqlQuery ="SELECT distinct countActors.title FROM (SELECT m2.apiId as id, m2.title as title, " \
               "count(*) as sharedActors 		FROM  Shows as m, Movie as m2, Actors as a," \
               " ActorsShow as am, ActorsMovie as am2 		WHERE m.apiId=%s AND m.langId=m2.langId " \
               "AND am.showId=m.apiId AND am.actorId=a.actorId AND am2.filmId=m2.apiId AND am.actorId=am2.actorId" \
-              " GROUP BY m2.apiId) as countActors, 		(SELECT distinct m2.apiId as id, m2.title as title, count(*)" \
+              " GROUP BY m2.apiId,m2.title) as countActors, 		(SELECT distinct m2.apiId as id, m2.title as title, count(*)" \
               " as sharedGenres 		FROM  Shows as m, Movie as m2, Genre as g, ShowGenre as mg, MoviesGenre as mg2" \
               " 		WHERE m.apiId=%s AND m.langId=m2.langId AND mg.apiId=m.apiId AND mg.genreId=g.genreId AND " \
-              "mg2.apiId=m2.apiId AND mg.genreId=mg2.genreId 		GROUP BY m2.apiId) as countGenres, Movie m1 " \
+              "mg2.apiId=m2.apiId AND mg.genreId=mg2.genreId 		GROUP BY m2.apiId,m2.title) as countGenres, Movie m1 " \
               "WHERE countActors.sharedActors >= 1 AND countGenres.sharedGenres >=1 AND m1.apiId=countActors.id AND m1.apiId=countGenres.id"
     values = (apiId,apiId)
     cursorObject.execute(sqlQuery, values)
