@@ -1,3 +1,6 @@
+from pip._vendor import requests
+
+from SRC import InsertQueries
 
 
 def popularMovie(connectionObject):
@@ -366,4 +369,5 @@ def popularGenre(connectionObject):
     rows = cursorObject.fetchall()
     for row in rows:
         print(row[0] + "\n")
+
 
