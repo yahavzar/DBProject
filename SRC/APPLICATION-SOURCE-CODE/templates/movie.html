@@ -1,10 +1,19 @@
+
+
 <html>
 
-<body>
+<body onload="table()">
+<div class="middle">
+<div id="movies"></div>
+<br><br>
 {% for row  in rows %}
         <div><p> ApiID: {{ row[0] }} title:  {{ row[1]  }}</p></div>
         {% endfor %}<div>
     <a href="/">back</a>
 </div>
+</div>
+	<script type="text/javascript" src="../static/js/tabulator.min.js"></script>
+    <script type="text/javascript" src="../static/js/movie.js" defer></script>
+
 </body>
 </html>
