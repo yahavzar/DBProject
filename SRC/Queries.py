@@ -1,7 +1,6 @@
-from pip._vendor import requests
+import json
 
-from SRC import InsertQueries
-
+import pymysql
 
 def popularMovie(connectionObject):
     ## (query 2)
@@ -370,4 +369,6 @@ def popularGenre(connectionObject):
     for row in rows:
         print(row[0] + "\n")
 
-
+class NoResultsException(Exception):
+    def __init__(self, message):
+        self.message = message

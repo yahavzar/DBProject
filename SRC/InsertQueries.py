@@ -145,5 +145,17 @@ def insertProducersShow(connectionObject,producerId,showId):
     cursorObject.execute(sqlQuery, values)
     connectionObject.commit()
 
+def insertPosterMovie(connectionObject,apiId,image):
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "INSERT INTO PosterMovie  (apiId,image) VALUES (%s,%s)"
+    values = (apiId,image)
+    cursorObject.execute(sqlQuery, values)
+    connectionObject.commit()
 
+def insertPosterShows(connectionObject,apiId,image):
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "INSERT INTO PosterShow  (apiId,image) VALUES (%s,%s)"
+    values = (apiId,image)
+    cursorObject.execute(sqlQuery, values)
+    connectionObject.commit()
 

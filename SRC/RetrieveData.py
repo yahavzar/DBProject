@@ -256,10 +256,68 @@ def fetch_Credits_movies():
             except Exception as e:
                 print("Exeception occured:{}".format(e))
 
+
+
+def fetch_image():
+    # Fetch data for movies from api
+    connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
+                                       port=3305)
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "SELECT t1.apiId FROM Movie t1 LEFT JOIN PosterMovie t2 ON t2.apiId = t1.apiId WHERE t2.apiId IS NULL"
+    cursorObject.execute(sqlQuery)
+    rows = cursorObject.fetchall()
+    movies = {}
+    for row in rows:
+        movies[row[0]] = row[0]
+
+    for movie in movies:
+        movie_url = f"https://api.themoviedb.org/3/movie/{movie}"
+        data = {'api_key': 'd005091db9214b502565db95dea43fc7'}
+        req = requests.get(movie_url, data)
+        try:
+            js = req.json()
+            id = js['id']
+            poster = js['poster_path']
+            InsertQueries.insertPosterMovie(connectionObject, id ,poster)
+
+        except Exception as e:
+            print("Exeception occured:{}".format(e))
+            InsertQueries.insertPosterMovie(connectionObject, movie ,None)
+
+            continue
+
+
+def fetch_showimage():
+    # Fetch data for movies from api
+    connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
+                                       port=3305)
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "SELECT t1.apiId FROM Shows t1 LEFT JOIN PosterShow t2 ON t2.apiId = t1.apiId WHERE t2.apiId IS NULL"
+    cursorObject.execute(sqlQuery)
+    rows = cursorObject.fetchall()
+    shows = {}
+    for row in rows:
+        shows[row[0]] = row[0]
+
+    for show in shows:
+        show_url = f"https://api.themoviedb.org/3/tv/{show}"
+        data = {'api_key': 'd005091db9214b502565db95dea43fc7'}
+        req = requests.get(show_url, data)
+        try:
+            js = req.json()
+            id = js['id']
+            poster = js['poster_path']
+            InsertQueries.insertPosterShows(connectionObject, id ,poster)
+
+        except Exception as e:
+            print("Exeception occured:{}".format(e))
+            InsertQueries.insertPosterShows(connectionObject, show ,None)
+            continue
 def fetch_Data():
+    pass
     #fetch_movie()
     #fetch_Credits_movies()
-    fetch_Credits_TV_shows()
+    #fetch_Credits_TV_shows()
     #fetch_TV_Show()
     #fetch_Credits_TV_shows()
 

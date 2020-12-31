@@ -124,6 +124,16 @@ create TABLE IF NOT EXISTS ShowOverview(
 showId int PRIMARY KEY,
 overview varchar(2048)
 );
+
+CREATE TABLE IF NOT EXISTS PosterShow(
+    apiId int NOT NULL PRIMARY KEY,
+    image VARCHAR(64)
+   );
+
+   CREATE TABLE IF NOT EXISTS PosterMovie(
+    apiId int NOT NULL PRIMARY KEY,
+    image VARCHAR(64)
+   );
 --====================================================================================================================--
 -- 2) Adding foreign keys
 --====================================================================================================================--
@@ -180,6 +190,12 @@ ADD FOREIGN KEY (genreId) REFERENCES Genre(genreId);
 
 ALTER TABLE ShowOverview
 ADD FOREIGN KEY (showId) REFERENCES Shows(apiid);
+
+ALTER TABLE PosterMovie
+ADD FOREIGN KEY (apiId) REFERENCES Movie(apiid);
+
+ALTER TABLE PosterShow
+ADD FOREIGN KEY (apiId) REFERENCES Shows(apiid);
 --====================================================================================================================--
 -- 4) Adding indices
 --====================================================================================================================--
