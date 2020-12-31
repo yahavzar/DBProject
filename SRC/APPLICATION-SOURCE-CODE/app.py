@@ -11,6 +11,7 @@ app = Flask(__name__)
 @app.route('/index')
 def index():
     return render_template('index.html')
+
 @app.route('/search')
 def search_return_html():
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
@@ -36,11 +37,13 @@ def search_return_html():
     values = (apiId, apiId)
     cursorObject.execute(sqlQuery, values)
     rows = cursorObject.fetchall()
-
+    str = ""
+    for row in rows :
+        str =str+ " , "+row[0]
     # with connector get to your mysql server and query the DB
     # return the answer to number_of_songs var.
     number_of_songs = 8 #should be retrieved from the DB
-    return render_template('searchResults.html', count=rows[0], query=query)
+    return render_template('searchResults.html', movie=str, query=query)
 
 if __name__ == '__main__':
     #connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",port=3305)
