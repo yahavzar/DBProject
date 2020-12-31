@@ -369,6 +369,3 @@ def popularGenre(connectionObject):
     for row in rows:
         print(row[0] + "\n")
 
-class NoResultsException(Exception):
-    def __init__(self, message):
-        self.message = message
