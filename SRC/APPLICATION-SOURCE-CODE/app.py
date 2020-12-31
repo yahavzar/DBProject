@@ -45,6 +45,24 @@ def search_return_html():
     number_of_songs = 8 #should be retrieved from the DB
     return render_template('searchResults.html', movie=str, query=query)
 
+@app.route('/movies')
+def specific_movie_to_html():
+    connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
+                                       port=3305)
+    query = request.args.get('query')
+
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "select apiId,title from Movie where apiId=%s "
+    cursorObject.execute(sqlQuery,query)
+    rows = cursorObject.fetchall()
+    for row in rows:
+        apiId = row[0]
+        title = row[1]
+        break
+
+    return render_template('movie.html', movie=apiId, query=title)
+
+
 @app.route('/movie')
 def movie_to_html():
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
@@ -59,7 +77,6 @@ def movie_to_html():
         break
 
     return render_template('movie.html', movie=apiId, query=title)
-
 if __name__ == '__main__':
     #connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",port=3305)
    app.run()
