@@ -60,7 +60,7 @@ def specific_movie_to_html():
         title = row[1]
         break
 
-    return render_template('movie.html', movie=apiId, query=title)
+    return render_template('movies.html', movie=apiId, query=title)
 
 
 @app.route('/movie')
@@ -71,12 +71,9 @@ def movie_to_html():
     sqlQuery = "select apiId,title from Movie "
     cursorObject.execute(sqlQuery)
     rows = cursorObject.fetchall()
-    for row in rows:
-        apiId = row[0]
-        title = row[1]
-        break
 
-    return render_template('movie.html', movie=apiId, query=title)
+
+    return render_template('movie.html', rows=rows)
 if __name__ == '__main__':
     #connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",port=3305)
    app.run()
