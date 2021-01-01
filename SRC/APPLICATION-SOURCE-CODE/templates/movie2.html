@@ -7,24 +7,26 @@
 
 <div class="middle">
 <div id="movie"></div>
-
 <script>
-
-
-    table= new Tabulator("#movie", {
+        table= new Tabulator("#movie", {
         layout: "fitColumns",
+        placeholder: "No Data Set",
         columns: [
             {title: "ApiId"},
             {title: "Title"}],
     });
-    var rows = {{ rows |safe }}
-        table.setData(rows);
-            $("movie").tabulator("redraw")
+</script>
 
-            </script>
+{% for row  in rows %}
+        <script> table.addRow( ApiId= "{{ row[0] }}" ,Title= "{{ row[1]  }}",true).then(function(row){
+    //row - the row component for the row updated or added
 
-
-
+    //run code after data has been updated
+})
+.catch(function(error){
+    //handle error updating data
+});</script>
+        {% endfor %}<div>
     <a href="/">back</a>
 </div>
 </div>

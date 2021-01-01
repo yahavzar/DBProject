@@ -1,4 +1,5 @@
 import decimal
+import json
 
 import pymysql
 
@@ -70,10 +71,12 @@ def movie_to_html():
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
                                        port=3305)
     cursorObject = connectionObject.cursor()
-    sqlQuery = "select apiId,title from Movie "
+    sqlQuery = "select apiId,title from Movie limit 10 "
     cursorObject.execute(sqlQuery)
     rows = cursorObject.fetchall()
-    return render_template('movie.html', rows=rows)
+    somedict = [{"ApiId":row[0],
+                "Title":  row[1]} for row in rows]
+    return render_template('movie.html', rows= json.dumps(somedict))
 
 
 
