@@ -1,6 +1,6 @@
 import csv
 import pymysql
-from SRC import InsertQueries
+from SRC.API_DATA_RETRIEVE.DB import InsertQueries
 from SRC.API_DATA_RETRIEVE.Movie import Movie
 from SRC.API_DATA_RETRIEVE.Show import Show
 import requests
@@ -30,7 +30,7 @@ def fetch_movie():
                     continue
                 else:
                     languege[count] = js['original_language']
-                    InsertQueries.InsertToLang(connectionObject,count, js["original_language"])
+                    InsertQueries.InsertToLang(connectionObject, count, js["original_language"])
                     count+=1
                 langId = InsertQueries.get_key(languege, js['original_language'])
                 movie = Movie(js["adult"], js["belongs_to_collection"], js["budget"]
@@ -278,11 +278,11 @@ def fetch_image():
             js = req.json()
             id = js['id']
             poster = js['poster_path']
-            InsertQueries.insertPosterMovie(connectionObject, id ,poster)
+            InsertQueries.insertPosterMovie(connectionObject, id, poster)
 
         except Exception as e:
             print("Exeception occured:{}".format(e))
-            InsertQueries.insertPosterMovie(connectionObject, movie ,None)
+            InsertQueries.insertPosterMovie(connectionObject, movie, None)
 
             continue
 
@@ -307,11 +307,11 @@ def fetch_showimage():
             js = req.json()
             id = js['id']
             poster = js['poster_path']
-            InsertQueries.insertPosterShows(connectionObject, id ,poster)
+            InsertQueries.insertPosterShows(connectionObject, id, poster)
 
         except Exception as e:
             print("Exeception occured:{}".format(e))
-            InsertQueries.insertPosterShows(connectionObject, show ,None)
+            InsertQueries.insertPosterShows(connectionObject, show, None)
             continue
 def fetch_Data():
     pass
