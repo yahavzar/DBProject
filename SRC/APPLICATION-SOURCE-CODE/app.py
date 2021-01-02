@@ -1,8 +1,5 @@
-import decimal
 import json
-
 import pymysql
-
 from SRC import RetrieveData
 from SRC import Queries
 from flask import Flask, render_template, request, Blueprint, jsonify
@@ -71,7 +68,7 @@ def movie_to_html():
     connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
                                        port=3305)
     cursorObject = connectionObject.cursor()
-    sqlQuery = "select apiId,title from Movie limit 10 "
+    sqlQuery = "select apiId,title from Movie  "
     cursorObject.execute(sqlQuery)
     rows = cursorObject.fetchall()
     somedict = [{"ApiId":row[0],

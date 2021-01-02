@@ -12,14 +12,15 @@
 
 
     table= new Tabulator("#movie", {
-        layout: "fitColumns",
+    layout:"fitColumns",
+    height: "311px",
+    placeholder:"No Data Set",
         columns: [
-            {title: "ApiId"},
-            {title: "Title"}],
+            {title: "ApiId",field:"ApiId"},
+            {title: "Title",field:"Title"}],
     });
     var rows = {{ rows |safe }}
         table.setData(rows);
-            $("movie").tabulator("redraw")
 
             </script>
 
