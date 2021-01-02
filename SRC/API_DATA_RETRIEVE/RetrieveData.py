@@ -1,8 +1,8 @@
 import csv
 import pymysql
 from SRC import InsertQueries
-from SRC.Movie import Movie
-from SRC.Show import Show
+from SRC.API_DATA_RETRIEVE.Movie import Movie
+from SRC.API_DATA_RETRIEVE.Show import Show
 import requests
 
 

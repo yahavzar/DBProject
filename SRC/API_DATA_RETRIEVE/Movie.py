@@ -1,4 +1,4 @@
-from SRC.Media import Media
+from SRC.API_DATA_RETRIEVE.Media import Media
 
 
 
