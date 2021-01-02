@@ -2,7 +2,7 @@ import json
 import pymysql
 from flask import Flask, render_template, request
 
-from SRC.API_DATA_RETRIEVE.RetrieveData import *
+from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import *
 
 app = Flask(__name__)
 
@@ -81,6 +81,5 @@ def movie_to_html():
 
 
 if __name__ == '__main__':
-    #connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",port=3305)
    #app.run()
-   pass
+   select("SELECT * FROM Movie")
