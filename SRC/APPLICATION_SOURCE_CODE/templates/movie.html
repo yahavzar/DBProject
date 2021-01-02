@@ -16,10 +16,10 @@
     height: "311px",
     placeholder:"No Data Set",
         columns: [
-            {title: "ApiId",field:"ApiId"},
-            {title: "Title",field:"Title"}],
+            {title: "ApiId",field:"apiId"},
+            {title: "Title",field:"title"}],
     });
-    var rows = {{ rows |safe }}
+    var rows = {{ res |safe }}
         table.setData(rows);
 
             </script>
