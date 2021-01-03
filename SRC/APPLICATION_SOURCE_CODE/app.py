@@ -11,7 +11,29 @@ app = Flask(__name__)
 @app.route('/index')
 def index():
     res = [{"apiId":"2","title":"yahav"}]
-    return render_template('index.html', res=json.dumps(res))
+    return render_template('Front-Page.html', res=json.dumps(res))
+
+@app.route('/Credits')
+def Credits():
+    return render_template('Credits.html')
+
+@app.route('/Actors')
+def Actors():
+    return render_template('Actors.html')
+
+@app.route('/Foreign-Languages')
+def Foreign_Languages():
+    return render_template('Foreign-Languages.html')
+
+@app.route('/Search-Movies-or-TV-Shows')
+def Search_Movies_or_TV_Shows():
+    return render_template('Search-Movies-or-TV-Shows.html')
+
+@app.route('/TV-Show')
+def TV_Show():
+    return render_template('TV-Show.html')
+
+
 @app.route('/search')
 def search_return_html():
     query = request.args.get('query')
