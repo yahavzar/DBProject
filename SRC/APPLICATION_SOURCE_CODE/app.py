@@ -65,13 +65,13 @@ def specific_movie_to_html(apiId):
     return render_template('specific_movie.html', apiId=apiId,movie=movie)
 
 
-@app.route('/movie')
+@app.route('/testmoce')
 def movie_to_html():
     sqlQuery = "select apiId,title from Movie   "
     res = select(sqlQuery)
     result = [{res['headers'][0]: row[0],
                  res['headers'][1]: row[1]} for row in res['rows']]
-    return render_template('movie.html', res=json.dumps(result))
+    return render_template('testmoce.html', res=json.dumps(result))
 
 
 
