@@ -207,6 +207,9 @@ ALTER TABLE Movie ADD INDEX langID (langId);
 ALTER TABLE Movie ADD INDEX id (apiId);
 ALTER TABLE Shows ADD INDEX langId (langId);
 ALTER TABLE Shows ADD INDEX id (apiId);
+ALTER TABLE Shows ADD FULLTEXT(title);
+ALTER TABLE Movie ADD FULLTEXT(title);
+
 
 
 
