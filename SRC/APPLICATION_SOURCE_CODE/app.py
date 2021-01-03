@@ -130,6 +130,7 @@ def Actors():
 @app.route('/Foreign-Languages')
 def Foreign_Languages():
     return render_template('Foreign-Languages.html')
+
 @app.route('/testmoce')
 def movie_to_html():
     sqlQuery = "select apiId,title from Movie   "
