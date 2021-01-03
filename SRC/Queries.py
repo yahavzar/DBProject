@@ -368,4 +368,10 @@ def popularGenre(connectionObject):
     rows = cursorObject.fetchall()
     for row in rows:
         print(row[0] + "\n")
-
+def full_text(connectionObject):
+    cursorObject = connectionObject.cursor()
+    sqlQuery = "select s.title from Shows as s where MATCH(s.title) AGAINST(%s) union select m.title from Movie as m where MATCH(m.title) AGAINST(%s)"
+    cursorObject.execute(sqlQuery)
+    rows = cursorObject.fetchall()
+    for row in rows:
+        print(row[0] + "\n")
