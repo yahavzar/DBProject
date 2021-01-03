@@ -68,26 +68,21 @@ def movie(apiId):
 
 @app.route('/search')
 def search_return_html():
-    query = request.args.get('query')
-    sqlQuery = "select Movie.apiId from Movie where Movie.title=%s"
-    res = select(sqlQuery,query)
-    apiId=res['rows'][0][0]
-    sqlQuery = "select distinct commonMovie.title  from (SELECT m2.apiId as id,m2.title as title, " \
-               "count(*) as count FROM Movie as m, Movie as m2, Actors as a, ActorsMovie as am, " \
-               "ActorsMovie as am2 WHERE m.apiId=%s AND am.filmId<>am2.filmId AND am.filmId=m.apiId" \
-               " AND am.actorId=a.actorId AND am2.filmId=m2.apiId AND am.actorId=am2.actorId AND" \
-               " m.langId=m2.langId GROUP BY m2.apiId,m2.title) as commonMovie  , (SELECT distinct m2.apiId " \
-               "as id, m2.title as title, count(*) as count FROM Movie as m, Movie as m2, Genre as g" \
-               ", MoviesGenre as mg, MoviesGenre as mg2 WHERE m.apiId=%s AND mg.apiId<>mg2.apiId AND " \
-               "mg.apiId=m.apiId AND mg.genreId=g.genreId AND mg2.apiId=m2.apiId AND mg.genreId=mg2.genreId " \
-               "GROUP BY m2.apiId,m2.title) as commonGenre , Movie m1 where commonMovie.count >4 and commonGenre.count>2" \
-               " and m1.apiId=commonMovie.id and m1.apiId=commonGenre.id"
-    res = select(sqlQuery, [apiId,apiId])
-    str = ""
-    for row in res['rows']:
-        str = str + " , " + row[0]
+    resultTitle = request.args.get('search')
+    sqlQuery = "select apiId from Movie where title=%s"
+    res = select(sqlQuery,resultTitle)
+    resultapi = [{res['headers'][0]: row[0]} for row in res['rows']]
+    apiId = resultapi[0]['apiId']
+    sqlQuery = "select overview from MovieOverview where MovieOverview.filmId=%s"
+    resOverView= select(sqlQuery,apiId)
+    resultOverview = [{resOverView['headers'][0]: row[0]} for row in resOverView['rows']]
+    resultOverview=resultOverview[0]['overview']
+    sqlQuery="select image from PosterMovie where apiId=%s"
+    resimage = select(sqlQuery,apiId)
+    resultimage = [{resimage['headers'][0]: row[0]} for row in resimage['rows']]
+    resultimage=resultimage[0]['image']
+    return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage)
 
-    return render_template('searchResults.html',movie=str,query=query,)
 
 @app.route('/specific_movie/<apiId>')
 def specific_movie_to_html(apiId):
