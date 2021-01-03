@@ -8,10 +8,25 @@ app = Flask(__name__)
 
 
 @app.route('/')
-@app.route('/index')
 def index():
-    res = [{"apiId":"2","title":"yahav"}]
-    return render_template('Front-Page.html', res=json.dumps(res))
+
+    sqlQuery = "select  m.title , pm.image from Movie m, ( select avg(voteCount) as " \
+               "avg from Movie) as avgVoteCount , ( select avg(voteAvg) as avg from Movie)" \
+               " as avgVoteavg , ( select avg(popularity) as avg from Movie) as avgPopularity" \
+               ",( select avg(revenue) as avg from Movie) as avgrevenue , PosterMovie pm where " \
+               "m.voteCount>=avgVoteCount.avg and m.voteAvg>=avgVoteavg.avg and m.popularity>=avgPopularity.avg " \
+               "and m.releaseDay between '2020-01-01' and '2021-01-01' and m.revenue>= avgrevenue.avg " \
+               "and pm.apiId=m.apiId and pm.image is not null limit 5"
+    res = select(sqlQuery)
+    result = [{res['headers'][0]: row[0],
+                 res['headers'][1]: row[1]} for row in res['rows']]
+    image0= result[0]['image']
+    image1= result[1]['image']
+    image2= result[2]['image']
+    image3= result[3]['image']
+    image4= result[4]['image']
+
+    return render_template('Front-Page.html',image0=image0,image1=image1,image2=image2,image3=image3,image4=image4)
 
 @app.route('/Credits')
 def Credits():
@@ -77,7 +92,6 @@ def movie_to_html():
 def fun():
    if request.method == 'POST':
        title = request.form['title']
-
    sqlQuery="select s.title from Shows as s where MATCH(s.title) AGAINST(%s) union select m.title from Movie as m where MATCH(m.title) AGAINST(%s)"
    res=select(sqlQuery,[title,title])
    result=[{res['headers'][0]: row[0] } for row in res['rows']]
