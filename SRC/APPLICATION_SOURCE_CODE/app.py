@@ -38,16 +38,25 @@ def index():
 
     return render_template('Front-Page.html',image0=image0,image1=image1,image2=image2,image3=image3,image4=image4,link0=link0,link1=link1,link2=link2,link3=link3,link4=link4)
 
+@app.route("/Search-Movies-or-TV-Shows")
+def serach_movie_ortv():
+    return render_template('Search-Movies-or-TV-Shows.html')
 
 
 @app.route("/Search-Movies-or-TV-Shows",methods=['POST','GET'])
 def search_full_text():
    if request.method == 'POST':
        title = request.form['title']
+
    sqlQuery="select s.title from Shows as s where MATCH(s.title) AGAINST(%s) union select m.title from Movie as m where MATCH(m.title) AGAINST(%s)"
-   res=select(sqlQuery,[title,title])
-   result=[{res['headers'][0]: row[0] } for row in res['rows']]
-   return render_template('Search-Movies-or-TV-Shows.html',res=json.dumps(result))
+   try:
+    res=select(sqlQuery,[title,title])
+    result=[{res['headers'][0]: row[0] } for row in res['rows']]
+    return render_template('Search-Movies-or-TV-Shows.html',res=json.dumps(result))
+   except sql_executor.NoResultsException:
+       return render_template('Search-Movies-or-TV-Shows.html')
+
+
 
 @app.route('/tvshow/<apiId>')
 def TV_Show(apiId):
