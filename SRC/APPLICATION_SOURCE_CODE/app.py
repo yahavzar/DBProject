@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/')
 @app.route('/movie')
-@app.route('/TV-Show')
+@app.route('/tvshow')
 def index():
 
     sqlQuery = "select  m.title , pm.image from Movie m, ( select avg(voteCount) as " \
