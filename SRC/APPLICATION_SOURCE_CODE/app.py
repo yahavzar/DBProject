@@ -1,7 +1,7 @@
 import json
 import pymysql
 from flask import Flask, render_template, request
-
+import cgi
 from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import *
 
 app = Flask(__name__)
@@ -27,7 +27,8 @@ def Foreign_Languages():
 
 @app.route('/Search-Movies-or-TV-Shows')
 def Search_Movies_or_TV_Shows():
-    return render_template('Search-Movies-or-TV-Shows.html')
+    res = [{"apiId": "2", "title": "yahav"}]
+    return render_template('Search-Movies-or-TV-Shows.html', res=json.dumps(res))
 
 @app.route('/TV-Show')
 def TV_Show():
@@ -73,10 +74,12 @@ def movie_to_html():
                  res['headers'][1]: row[1]} for row in res['rows']]
     return render_template('testmoce.html', res=json.dumps(result))
 
-
-
-
-
+@app.route("/Search-Movies-or-TV-Shows",methods=['POST','GET'])
+def fun():
+   if request.method == 'POST':
+       result = dict(request.form)
+       movie= result['"title"']
+   return render_template('Search-Movies-or-TV-Shows.html')
 
 if __name__ == '__main__':
    app.run()
