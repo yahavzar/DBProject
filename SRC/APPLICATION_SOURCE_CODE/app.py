@@ -101,9 +101,10 @@ def movie(apiId):
 def search_return_html():
     try :
         resultTitle = request.args.get('search')
-        sqlQuery = "select apiId from Movie where title=%s"
+        sqlQuery = "select apiId,title from Movie where title=%s"
         res = select(sqlQuery,resultTitle)
-        resultapi = [{res['headers'][0]: row[0]} for row in res['rows']]
+        resultapi = [{res['headers'][0]: row[0],res['headers'][1]:row[1]}  for row in res['rows']]
+        resultTitle = resultapi[0]['title']
         apiId = resultapi[0]['apiId']
         sqlQuery = "select overview from MovieOverview where MovieOverview.filmId=%s"
         resOverView= select(sqlQuery,apiId)
@@ -117,9 +118,10 @@ def search_return_html():
     except sql_executor.NoResultsException:
         try :
             resultTitle = request.args.get('search')
-            sqlQuery = "select apiId from Shows where title=%s"
+            sqlQuery = "select apiId,title from Shows where title=%s"
             res = select(sqlQuery, resultTitle)
-            resultapi = [{res['headers'][0]: row[0]} for row in res['rows']]
+            resultapi = [{res['headers'][0]: row[0], res['headers'][1]: row[1]} for row in res['rows']]
+            resultTitle = resultapi[0]['title']
             apiId = resultapi[0]['apiId']
             sqlQuery = "select overview from ShowOverview where ShowOverview.showId=%s"
             resOverView= select(sqlQuery,apiId)
