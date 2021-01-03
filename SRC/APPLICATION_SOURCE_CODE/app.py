@@ -15,7 +15,7 @@ app = Flask(__name__)
 @app.route('/tvshow')
 def index():
 
-    sqlQuery = "select  m.title , pm.image from Movie m, ( select avg(voteCount) as " \
+    sqlQuery = "select  m.apiId , pm.image from Movie m, ( select avg(voteCount) as " \
                "avg from Movie) as avgVoteCount , ( select avg(voteAvg) as avg from Movie)" \
                " as avgVoteavg , ( select avg(popularity) as avg from Movie) as avgPopularity" \
                ",( select avg(revenue) as avg from Movie) as avgrevenue , PosterMovie pm where " \
@@ -30,8 +30,13 @@ def index():
     image2= result[2]['image']
     image3= result[3]['image']
     image4= result[4]['image']
+    link0 = result[0]['apiId']
+    link1 = result[1]['apiId']
+    link2 = result[2]['apiId']
+    link3 = result[3]['apiId']
+    link4 = result[4]['apiId']
 
-    return render_template('Front-Page.html',image0=image0,image1=image1,image2=image2,image3=image3,image4=image4)
+    return render_template('Front-Page.html',image0=image0,image1=image1,image2=image2,image3=image3,image4=image4,link0=link0,link1=link1,link2=link2,link3=link3,link4=link4)
 
 
 
