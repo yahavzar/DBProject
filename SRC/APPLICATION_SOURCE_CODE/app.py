@@ -10,8 +10,8 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
-
+    res = [{"apiId":"2","title":"yahav"}]
+    return render_template('index.html', res=json.dumps(res))
 @app.route('/search')
 def search_return_html():
     query = request.args.get('query')
@@ -45,8 +45,7 @@ def specific_movie_to_html(apiId):
 
 @app.route('/movie')
 def movie_to_html():
-
-    sqlQuery = "select apiId,title from Movie  "
+    sqlQuery = "select apiId,title from Movie   "
     res = select(sqlQuery)
     result = [{res['headers'][0]: row[0],
                  res['headers'][1]: row[1]} for row in res['rows']]

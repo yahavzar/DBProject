@@ -9,8 +9,6 @@
 <div id="movie"></div>
 
 <script>
-
-
     table= new Tabulator("#movie", {
     layout:"fitColumns",
     height: "311px",
@@ -21,7 +19,6 @@
     });
     var rows = {{ res |safe }}
         table.setData(rows);
-
             </script>
 
 
