@@ -49,6 +49,23 @@ def TV_Show():
     return render_template('TV-Show.html')
 
 
+@app.route('/movie/<apiId>')
+def movie(apiId):
+    sqlQuery = "select title from Movie where Movie.apiId=%s"
+    resTitle = select(sqlQuery,apiId)
+    resultTitle = [{resTitle['headers'][0]: row[0]} for row in resTitle['rows']]
+    resultTitle=resultTitle[0]['title']
+    sqlQuery = "select overview from MovieOverview where MovieOverview.filmId=%s"
+    resOverView= select(sqlQuery,apiId)
+    resultOverview = [{resOverView['headers'][0]: row[0]} for row in resOverView['rows']]
+    resultOverview=resultOverview[0]['overview']
+    sqlQuery="select image from PosterMovie where apiId=%s"
+    resimage = select(sqlQuery,apiId)
+    resultimage = [{resimage['headers'][0]: row[0]} for row in resimage['rows']]
+    resultimage=resultimage[0]['image']
+    return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage)
+
+
 @app.route('/search')
 def search_return_html():
     query = request.args.get('query')
