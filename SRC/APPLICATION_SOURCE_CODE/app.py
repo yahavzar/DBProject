@@ -84,12 +84,6 @@ def search_return_html():
     return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage)
 
 
-@app.route('/specific_movie/<apiId>')
-def specific_movie_to_html(apiId):
-    sqlQuery = "select apiId,title from Movie where apiId=%s "
-    res = select(sqlQuery,apiId)
-    movie = res['rows'][0][1]
-    return render_template('specific_movie.html', apiId=apiId,movie=movie)
 
 
 @app.route('/testmoce')
