@@ -80,7 +80,7 @@
           <p> Enter prefix of movie\show </p>
 
        <form action ="" method = "POST">
-	<input type=”text” name=”title” value={{request.form.title | safe}}>
+	<input type=”text” name=title value={{request.form.title | safe}}>
 	<button type=”submit”> Submit </button>
       </form>
 
@@ -95,7 +95,6 @@
     height: "311px",
     placeholder:"No Data Set",
         columns: [
-            {title: "ApiId",field:"apiId"},
             {title: "Title",field:"title"}],
     });
     var rows = {{ res |safe }}

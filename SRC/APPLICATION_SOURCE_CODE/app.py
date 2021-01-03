@@ -27,8 +27,7 @@ def Foreign_Languages():
 
 @app.route('/Search-Movies-or-TV-Shows')
 def Search_Movies_or_TV_Shows():
-    res = [{"apiId": "2", "title": "yahav"}]
-    return render_template('Search-Movies-or-TV-Shows.html', res=json.dumps(res))
+    return render_template('Search-Movies-or-TV-Shows.html')
 
 @app.route('/TV-Show')
 def TV_Show():
@@ -77,9 +76,12 @@ def movie_to_html():
 @app.route("/Search-Movies-or-TV-Shows",methods=['POST','GET'])
 def fun():
    if request.method == 'POST':
-       result = dict(request.form)
-       movie= result['"title"']
-   return render_template('Search-Movies-or-TV-Shows.html')
+       title = request.form['title']
+
+   sqlQuery="select s.title from Shows as s where MATCH(s.title) AGAINST(%s) union select m.title from Movie as m where MATCH(m.title) AGAINST(%s)"
+   res=select(sqlQuery,[title,title])
+   result=[{res['headers'][0]: row[0] } for row in res['rows']]
+   return render_template('Search-Movies-or-TV-Shows.html',res=json.dumps(result))
 
 if __name__ == '__main__':
    app.run()
