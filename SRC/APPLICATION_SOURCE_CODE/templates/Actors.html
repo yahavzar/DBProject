@@ -11,13 +11,15 @@
 <link rel="stylesheet" href="../static/project/Actors.css" media="screen">
     <script class="u-script" type="text/javascript" src="../static/project/jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="../static/project/nicepage.js" defer=""></script>
+                <link href="../static/tabulator-master/dist/css/tabulator.min.css" rel="stylesheet">
+<script type="text/javascript" src="../static/tabulator-master/dist/js/tabulator.min.js"></script>
     <meta name="generator" content="Nicepage 3.3.3, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
-    
-    
-    
-    
-    
+
+
+
+
+
     <script type="application/ld+json">{
 		"@context": "http://schema.org",
 		"@type": "Organization",
@@ -75,10 +77,35 @@
     <section class="u-clearfix u-section-1" id="sec-6afc">
       <div class="u-clearfix u-sheet u-sheet-1">
         <h1 class="u-heading-font u-text u-title u-text-1">Recommended Actors</h1>
-        <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
+        <div class="u-clearfix u-custom-html u-custom-html-1">
           <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
+          <p>Choose Genre Name:</p>
+            <form action ="" method = "POST">
+                <select name="dropdown">
+                    {% for genre in genres %}
+                    <option value= "{{genre}}" SELECTED>{{genre}}</option>"
+                    {% endfor %}
+                </select>
+                <input type = "submit" value = "Show Actors"/>
+            </form>
+                    <div id="actors"></div>
+                    <script>
+                        table= new Tabulator("#actors", {
+                        layout:"fitColumns",
+                        height: "311px",
+                        placeholder:"No Data Set",
+                            columns: [
+                                {title: "Actor's Name",field:"title"}],
+                        });
+                        var rows = {{ res |safe }}
+                            table.setData(rows);
+                    </script>
         </div>
+          <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-2">
+          <style></style>
+
+          </div>
+
       </div>
     </section>
     <section class="u-clearfix u-section-2" id="sec-5fed">
@@ -112,8 +139,8 @@
         </div>
       </div>
     </section>
-    
-    
+
+
     <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-1b5c"><div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-small-text u-text u-text-variant u-text-1">Database Project - Yahav Noa Adi Or</p>
       </div></footer>
@@ -126,7 +153,7 @@
       </p>
       <a class="u-link" href="https://nicepage.com/html-website-builder" target="_blank">
         <span>WYSIWYG HTML Editor</span>
-      </a>. 
+      </a>.
     </section>
   </body>
 </html>

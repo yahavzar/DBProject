@@ -176,7 +176,29 @@ def Credits():
 
 @app.route('/Actors')
 def Actors():
-    return render_template('Actors.html')
+    sqlQuery = "select distinct Genre.genreName as title from Genre"
+    res=select(sqlQuery)
+    result = [k[0] for k in res["rows"]]
+    return render_template('Actors.html',genres=result)
+
+@app.route("/Actors",methods=['POST','GET'])
+def search_recommended_actors():
+    if request.method == 'POST':
+        title = request.form['dropdown']
+
+    sqlQuery = "select * from (select a.actorName as title, count(*) as cnt from Actors a, MoviesGenre mg, Movie m , ActorsMovie am , Genre g , (select Genre.genreId as id  from Genre  where genreName=%s) AS temp,  (select g.genreId,g.genreName,avg(voteCount) as avgvotecount  from Movie m , Genre g, MoviesGenre mg  where m.apiId=mg.apiId and g.genreId=mg.genreId  group by g.genreId ) as GenreAvgVoteCount  where  m.apiId=mg.apiId and a.actorId=am.actorId and am.filmId=m.apiId and g.genreName=%s and  temp.id=mg.genreId and  m.voteCount>GenreAvgVoteCount.avgvotecount and m.voteAvg>8 and temp.id= GenreAvgVoteCount.genreId group by a.actorId union select a.actorName as name, count(*) as cnt from Actors a, ShowGenre mg, Shows m , ActorsShow am , Genre g , (select Genre.genreId as id from Genre where genreName=%s) AS temp, (select g.genreId,g.genreName,avg(voteCount) as avgvotecount from Shows m , Genre g, ShowGenre mg where m.apiId=mg.apiId and g.genreId=mg.genreId group by g.genreId ) as GenreAvgVoteCount  where  m.apiId=mg.apiId and a.actorId=am.actorId and am.showId=m.apiId and g.genreName=%s and  temp.id=mg.genreId and  m.voteCount>GenreAvgVoteCount.avgvotecount and m.voteAvg>8 and temp.id= GenreAvgVoteCount.genreId  group by a.actorId) as temp order by -cnt;"
+    try:
+        res = select(sqlQuery, [title, title, title, title])
+        result = [{res['headers'][0]: row[0] } for row in res['rows']]
+        sqlQuery = "select distinct Genre.genreName as title from Genre"
+        res2 = select(sqlQuery)
+        result2 = [k[0] for k in res2["rows"]]
+        return render_template('Actors.html', res=result, genres=result2)
+    except sql_executor.NoResultsException:
+        sqlQuery = "select distinct Genre.genreName as title from Genre"
+        res2 = select(sqlQuery)
+        result2 = [k[0] for k in res2["rows"]]
+        return render_template('Actors.html', genres=result2)
 
 @app.route('/Foreign-Languages')
 def Foreign_Languages():
