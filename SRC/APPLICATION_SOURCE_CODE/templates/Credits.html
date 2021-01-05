@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html style="font-size: 16px;">
   <head>
+          <link href="../static/tabulator-master/dist/css/tabulator.min.css" rel="stylesheet">
+<script type="text/javascript" src="../static/tabulator-master/dist/js/tabulator.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="keywords" content="">
@@ -77,7 +79,18 @@
         <h2 class="u-text u-text-1">Directors</h2>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
           <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
+   <div id="directors"></div>
+<script>
+    table= new Tabulator("#directors", {
+    layout:"fitColumns",
+    height: "311px",
+    placeholder:"No Data Set",
+        columns: [
+            {title: "Director Name",field:"directorName"}],
+    });
+    var rows = {{ res |safe }}
+        table.setData(rows);
+            </script>
         </div>
       </div>
     </section>
@@ -86,8 +99,18 @@
         <h2 class="u-text u-text-1">Producers</h2>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
           <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
-        </div>
+   <div id="Producers"></div>
+<script>
+    table= new Tabulator("#Producers", {
+    layout:"fitColumns",
+    height: "311px",
+    placeholder:"No Data Set",
+        columns: [
+            {title: "Producers Name",field:"producerName"}],
+    });
+    var rows = {{ res2 |safe }}
+        table.setData(rows);
+            </script>           </div>
       </div>
     </section>
     <section class="u-clearfix u-section-3" id="sec-6848">
@@ -96,8 +119,20 @@
         <h5 class="u-text u-text-2">Actors + Directors</h5>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
           <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
-        </div>
+   <div id="Winning_Combo_Movies"></div>
+<script>
+    table= new Tabulator("#Winning_Combo_Movies", {
+    layout:"fitColumns",
+    height: "311px",
+    placeholder:"No Data Set",
+        columns: [
+           {title: "Actor Name",field:"actorName"},
+            {title: "Director Name",field:"directorName"},
+            {title: "Num Of Movies",field:"count(*)"}],
+    });
+    var rows = {{ res3 |safe }}
+        table.setData(rows);
+            </script>             </div>
       </div>
     </section>
     <section class="u-clearfix u-section-4" id="sec-9811">
