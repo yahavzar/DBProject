@@ -93,6 +93,14 @@
                   <div class="u-border-9 u-border-black u-line u-line-horizontal u-line-1"></div>
                   <h2 class="u-text u-text-1">{{ resultTitle | safe}}</h2>
                   <p class="u-text u-text-2">{{ resultOverview | safe}}</p>
+
+                           <a href="{{ resultimdb| safe }}">
+                    <img src="../static/imdb_icon.PNG">
+                                                    </a>
+                    <p><b>Length</b> : {{ length |safe }}</p>
+                    <p> {{ collection |safe }}</p>
+                    <p>{{ webSite| safe }}</p>
+                    <p><b>Vote Average</b> : {{ vote | safe }}  <img src="../static/star-icon.png"  width="16" height="16"> </p>
                   <div class="u-border-9 u-border-black u-line u-line-horizontal u-line-2"></div>
                 </div>
               </div>
@@ -104,6 +112,9 @@
     <section class="u-clearfix u-section-2" id="sec-2a6e">
       <div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-text u-text-1">Cast&nbsp; and Director</p>
+          <p>{{ director|safe }}</p>
+                    <p>{{ credit|safe }}</p>
+
       </div>
     </section>
     <section class="u-black u-clearfix u-section-3" id="sec-2427">

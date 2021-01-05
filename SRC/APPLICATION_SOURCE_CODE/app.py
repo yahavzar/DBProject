@@ -103,9 +103,9 @@ def TV_Show(apiId):
 @app.route('/movie/<apiId>')
 def movie(apiId):
     try :
-        sqlQuery = "select title from Movie where Movie.apiId=%s"
-        resTitle = select(sqlQuery,apiId)
-        resultTitle = [{resTitle['headers'][0]: row[0]} for row in resTitle['rows']]
+        sqlQuery = "select * from Movie where Movie.apiId=%s"
+        resofMovie = select(sqlQuery,apiId)
+        resultTitle = [{resofMovie['headers'][1]: row[1]} for row in resofMovie['rows']]
         resultTitle=resultTitle[0]['title']
         sqlQuery = "select overview from MovieOverview where MovieOverview.filmId=%s"
         resOverView= select(sqlQuery,apiId)
@@ -115,7 +115,44 @@ def movie(apiId):
         resimage = select(sqlQuery,apiId)
         resultimage = [{resimage['headers'][0]: row[0]} for row in resimage['rows']]
         resultimage=resultimage[0]['image']
-        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage)
+        imdb = [{resofMovie['headers'][8]: row[8]} for row in resofMovie['rows']]
+        resultimdb="https://www.imdb.com/title/"+imdb[0]['imdbId']
+        length = [{resofMovie['headers'][4]: row[4]} for row in resofMovie['rows']]
+        length=length[0]['length']
+        collection = [{resofMovie['headers'][7]: row[7]} for row in resofMovie['rows']]
+        collection=collection[0]['collection']
+        if collection is not None :
+            collection = "<b>Collection</b>: " + collection
+        else :
+            collection=""
+        webSite = [{resofMovie['headers'][9]: row[9]} for row in resofMovie['rows']]
+        webSite = webSite[0]['homePage']
+        if webSite != "":
+            webSite = "<b>WebSite</b>: " + webSite
+        vote = [{resofMovie['headers'][13]: row[13]} for row in resofMovie['rows']]
+        vote = vote[0]['voteAvg']
+        sqlQuery = "select d.directorName from DirectorsMovie dm , Directors d where dm.filmId=%s and d.directorId=dm.directorId"
+        MovieDirector= select(sqlQuery,apiId)
+        director = [{MovieDirector['headers'][0]: row[0]} for row in MovieDirector['rows']]
+        director = director[0]['directorName']
+        if director is not None :
+            director = "<b>Director</b>: " + director
+        else :
+            director=""
+        sqlQuery = "select a.actorName from ActorsMovie am , Actors a where filmId=%s and a.actorId=am.actorId"
+        MovieActors= select(sqlQuery,apiId)
+        result = [{MovieActors['headers'][0]: row[0]} for row in MovieActors['rows']]
+        credit=''
+        first= True
+        for actor in result:
+            if  first==False:
+                credit = credit +"," +actor['actorName']
+            if first ==True :
+                credit  = actor['actorName']
+                first=False
+        if credit != None:
+            credit = "<b>Cast :</b> "  + credit;
+        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,resultimdb=resultimdb,length=length,collection=collection,webSite=webSite,vote=vote,director=director,credit=credit)
     except sql_executor.NoResultsException:
         abort(404)
 
@@ -137,7 +174,48 @@ def search_return_html():
         resimage = select(sqlQuery,apiId)
         resultimage = [{resimage['headers'][0]: row[0]} for row in resimage['rows']]
         resultimage=resultimage[0]['image']
-        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage)
+        sqlQuery = "select * from Movie where Movie.apiId=%s"
+        resofMovie = select(sqlQuery,apiId)
+        imdb = [{resofMovie['headers'][8]: row[8]} for row in resofMovie['rows']]
+        resultimdb = "https://www.imdb.com/title/" + imdb[0]['imdbId']
+        length = [{resofMovie['headers'][4]: row[4]} for row in resofMovie['rows']]
+        length = length[0]['length']
+        collection = [{resofMovie['headers'][7]: row[7]} for row in resofMovie['rows']]
+        collection = collection[0]['collection']
+        if collection is not None:
+            collection = "<b>Collection</b>: " + collection
+        else:
+            collection = ""
+        webSite = [{resofMovie['headers'][9]: row[9]} for row in resofMovie['rows']]
+        webSite = webSite[0]['homePage']
+        if webSite != "":
+            webSite = "<b>WebSite</b>: " + webSite
+        vote = [{resofMovie['headers'][13]: row[13]} for row in resofMovie['rows']]
+        vote = vote[0]['voteAvg']
+        sqlQuery = "select d.directorName from DirectorsMovie dm , Directors d where dm.filmId=%s and d.directorId=dm.directorId"
+        MovieDirector = select(sqlQuery, apiId)
+        director = [{MovieDirector['headers'][0]: row[0]} for row in MovieDirector['rows']]
+        director = director[0]['directorName']
+        if director is not None:
+            director = "<b>Director</b>: " + director
+        else:
+            director = ""
+        sqlQuery = "select a.actorName from ActorsMovie am , Actors a where filmId=%s and a.actorId=am.actorId"
+        MovieActors = select(sqlQuery, apiId)
+        result = [{MovieActors['headers'][0]: row[0]} for row in MovieActors['rows']]
+        credit = ''
+        first = True
+        for actor in result:
+            if first == False:
+                credit = credit + "," + actor['actorName']
+            if first == True:
+                credit = actor['actorName']
+                first = False
+        if credit != None:
+            credit = "<b>Cast :</b> " + credit;
+        return render_template('Movie.html', resultTitle=resultTitle, resultOverview=resultOverview,
+                               resimage=resultimage, resultimdb=resultimdb, length=length, collection=collection,
+                               webSite=webSite, vote=vote, director=director, credit=credit)
     except sql_executor.NoResultsException:
         try :
             resultTitle = request.args.get('search')
