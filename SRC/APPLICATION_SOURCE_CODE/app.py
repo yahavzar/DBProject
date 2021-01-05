@@ -36,7 +36,30 @@ def index():
     link3 = result[3]['apiId']
     link4 = result[4]['apiId']
 
-    return render_template('Front-Page.html',image0=image0,image1=image1,image2=image2,image3=image3,image4=image4,link0=link0,link1=link1,link2=link2,link3=link3,link4=link4)
+
+    sqlQuery=" select  m.apiId , pm.image from Shows m, ( select avg(voteCount) " \
+             "as avg from Shows) as avgVoteCount , ( select avg(voteAvg) as avg from" \
+             " Shows)  as avgVoteavg , ( select avg(popularity) as avg from Shows) as " \
+             "avgPopularity   , PosterShow pm where                m.voteCount>=avgVoteCount.avg" \
+             " and m.voteAvg>=avgVoteavg.avg and m.popularity>=avgPopularity.avg           " \
+             "      and m.releaseDay between '2020-01-01' and '2021-01-01' and   pm.apiId=m.apiId " \
+             "and pm.image is not null limit 5"
+    resShow = select(sqlQuery)
+    result = [{resShow['headers'][0]: row[0],
+               resShow['headers'][1]: row[1]} for row in resShow['rows']]
+    imageShow0 = result[0]['image']
+    imageShow1 = result[1]['image']
+    imageShow2 = result[2]['image']
+    imageShow3 = result[3]['image']
+    imageShow4 = result[4]['image']
+    Imagelink0 = result[0]['apiId']
+    Imagelink1 = result[1]['apiId']
+    Imagelink2 = result[2]['apiId']
+    Imagelink3 = result[3]['apiId']
+    Imagelink4 = result[4]['apiId']
+    return render_template('Front-Page.html',image0=image0,image1=image1,image2=image2,image3=image3,image4=image4,link0=link0,link1=link1,link2=link2,link3=link3,link4=link4,
+                           imageShow0=imageShow0,imageShow1=imageShow1,imageShow2=imageShow2,imageShow3=imageShow3,imageShow4=imageShow4,Imagelink0=Imagelink0,Imagelink1=Imagelink1
+                           ,Imagelink2=Imagelink2,Imagelink3=Imagelink3,Imagelink4=Imagelink4)
 
 @app.route("/Search-Movies-or-TV-Shows")
 def serach_movie_ortv():
@@ -137,7 +160,19 @@ def search_return_html():
 
 @app.route('/Credits')
 def Credits():
-    return render_template('Credits.html')
+    sqlQuery = "select directorName from Directors   "
+    res = select(sqlQuery)
+    result = [{res['headers'][0]: row[0]} for row in res['rows']]
+    sqlQuery = "select producerName from Producers   "
+    res2 = select(sqlQuery)
+    result2 = [{res2['headers'][0]: row[0]} for row in res2['rows']]
+    sqlQuery = "select a.actorName,d.directorName, count(*) from Actors a, ActorsMovie am" \
+               ",Directors d,DirectorsMovie dm , Movie m where a.actorId= am.actorId and " \
+               "d.directorId=dm.directorId and am.filmId=dm.filmId and m.apiId=am.filmId " \
+               "and m.voteAvg>5 group by a.actorName,d.directorName Having count(*)>7"
+    res3 = select(sqlQuery)
+    result3 = [{res3['headers'][0]: row[0], res3['headers'][1]: row[1], res3['headers'][2]: row[2]} for row in res3['rows']]
+    return render_template('Credits.html', res=json.dumps(result),res2=json.dumps(result2),res3=json.dumps(result3))
 
 @app.route('/Actors')
 def Actors():
