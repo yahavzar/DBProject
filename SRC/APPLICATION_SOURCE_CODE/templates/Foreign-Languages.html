@@ -77,7 +77,7 @@
         <h1 class="u-heading-font u-subtitle u-text u-text-default u-text-1">Movies</h1>
         <div class="u-clearfix u-custom-html u-custom-html-1">
           <style></style>
-            <p>Select Language:</p>
+            <p>Select Language and we will show you movies and TV shows in  language</p>
             <form action ="" method = "POST">
                 <select name="dropdown">
                     {% for language in languages %}
@@ -93,7 +93,8 @@
                         height: "311px",
                         placeholder:"No Data Set",
                             columns: [
-                                {title: "Movie's title",field:"title"}],
+                                {title: "Movie's title",field:"title"},
+                                {title: "Popularity",field: "popularity"}],
                         });
                         var rows = {{ resMovie |safe }}
                             table.setData(rows);
@@ -118,7 +119,8 @@
                     height: "311px",
                     placeholder:"No Data Set",
                         columns: [
-                            {title: "Show's title",field:"title"}],
+                            {title: "Show's title",field:"title"},
+                                {title: "Popularity",field: "popularity"}],
                     });
                     var rows = {{ resShow |safe }}
                         table.setData(rows);

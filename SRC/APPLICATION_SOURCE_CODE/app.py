@@ -152,9 +152,57 @@ def movie(apiId):
                 first=False
         if credit != None:
             credit = "<b>Cast :</b> "  + credit;
-        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,resultimdb=resultimdb,length=length,collection=collection,webSite=webSite,vote=vote,director=director,credit=credit)
+        imagerc1 = ""
+        linkc1 = ""
+        imagers1 = ""
+        links1 = ""
     except sql_executor.NoResultsException:
         abort(404)
+    try :
+        sqlQuery = "select distinct commonMovie.id ,pm.image from (SELECT m2.apiId as" \
+                   " id,m2.title as title,  count(*) as count FROM Movie as m, Movie as " \
+                   "m2, Actors as a, ActorsMovie as am, ActorsMovie as am2 WHERE m.apiId=%s" \
+                   " AND am.filmId<>am2.filmId AND am.filmId=m.apiId  AND am.actorId=a.actorId" \
+                   " AND am2.filmId=m2.apiId AND am.actorId=am2.actorId AND  m.langId=m2.langId " \
+                   "GROUP BY m2.apiId,m2.title) as commonMovie  , (SELECT distinct m2.apiId as " \
+                   "id, m2.title as title, count(*) as count FROM Movie as m, Movie as m2, Genre " \
+                   "as g  , MoviesGenre as mg, MoviesGenre as mg2 WHERE m.apiId=%s AND mg.apiId<>mg2.apiId" \
+                   " AND  mg.apiId=m.apiId AND mg.genreId=g.genreId AND mg2.apiId=m2.apiId AND" \
+                   " mg.genreId=mg2.genreId  GROUP BY m2.apiId,m2.title) as commonGenre , Movie" \
+                   " m1,PosterMovie pm where commonMovie.count >3 and commonGenre.count>2    " \
+                   "and m1.apiId=commonMovie.id and m1.apiId=commonGenre.id and commonMovie.id= pm.apiId limit 2   "
+        similarMovie = select(sqlQuery,[ apiId,apiId])
+        resultS = [{similarMovie['headers'][0]: row[0],
+                   similarMovie['headers'][1]: row[1]} for row in similarMovie['rows']]
+        imagers1 = resultS[0]['image']
+        links1 = resultS[0]['id']
+    except sql_executor.NoResultsException:
+        pass
+    try:
+        sqlQuery = "select distinct m2.apiId ,pm.image from Movie m1,MoviesGenre mg1 , Movie m2, " \
+                   "MoviesGenre     mg2 , PosterMovie pm where  m1.apiId=mg1.apiId and m2.releaseDay " \
+                   "between m1.releaseDay - interval 6 month and m1.releaseDay  and m2.apiId=mg2.apiId " \
+                   "and mg1.genreId=mg2.genreId and m2.langId= m1.langId and m1.apiId=%s and m1.apiId <>m2.apiId and pm.apiId=m2.apiId limit 2"
+        commptiveMovie = select(sqlQuery, apiId)
+        resultM = [{commptiveMovie['headers'][0]: row[0],
+                   commptiveMovie['headers'][1]: row[1]} for row in commptiveMovie['rows']]
+
+        imagerc1 = resultM[0]['image']
+        linkc1 = resultM[0]['apiId']
+        if imagerc1=="":
+            imagerc1= "./static/noimage.png"
+            linkc1=apiId
+        else :
+            imagerc1= "https://image.tmdb.org/t/p/w500/" +imagerc1
+        if imagers1=="":
+            imagers1= "../static/noimage.png"
+            links1=apiId
+        else :
+            imagers1= "https://image.tmdb.org/t/p/w500/" +imagers1
+        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,resultimdb=resultimdb,length=length,collection=collection,webSite=webSite,vote=vote,director=director,credit=credit,
+                               imagers1=imagers1,links1=links1,imagerc1=imagerc1,linkc1=linkc1)
+    except sql_executor.NoResultsException:
+        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,resultimdb=resultimdb,length=length,collection=collection,webSite=webSite,vote=vote,director=director,credit=credit)
 
 
 @app.route('/search')
@@ -213,11 +261,12 @@ def search_return_html():
                 first = False
         if credit != None:
             credit = "<b>Cast :</b> " + credit;
-        return render_template('Movie.html', resultTitle=resultTitle, resultOverview=resultOverview,
-                               resimage=resultimage, resultimdb=resultimdb, length=length, collection=collection,
-                               webSite=webSite, vote=vote, director=director, credit=credit)
+        imagerc1 = ""
+        linkc1 = ""
+        imagers1 = ""
+        links1 = ""
     except sql_executor.NoResultsException:
-        try :
+        try:
             resultTitle = request.args.get('search')
             sqlQuery = "select apiId,title from Shows where title=%s"
             res = select(sqlQuery, resultTitle)
@@ -225,16 +274,68 @@ def search_return_html():
             resultTitle = resultapi[0]['title']
             apiId = resultapi[0]['apiId']
             sqlQuery = "select overview from ShowOverview where ShowOverview.showId=%s"
-            resOverView= select(sqlQuery,apiId)
+            resOverView = select(sqlQuery, apiId)
             resultOverview = [{resOverView['headers'][0]: row[0]} for row in resOverView['rows']]
-            resultOverview=resultOverview[0]['overview']
-            sqlQuery="select image from PosterShow where apiId=%s"
-            resimage = select(sqlQuery,apiId)
+            resultOverview = resultOverview[0]['overview']
+            sqlQuery = "select image from PosterShow where apiId=%s"
+            resimage = select(sqlQuery, apiId)
             resultimage = [{resimage['headers'][0]: row[0]} for row in resimage['rows']]
-            resultimage=resultimage[0]['image']
-            return render_template('TV-Show.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage)
+            resultimage = resultimage[0]['image']
+            return render_template('TV-Show.html', resultTitle=resultTitle, resultOverview=resultOverview,
+                                   resimage=resultimage)
         except sql_executor.NoResultsException:
             abort(404)
+    try:
+        sqlQuery = "select distinct commonMovie.id ,pm.image from (SELECT m2.apiId as" \
+                   " id,m2.title as title,  count(*) as count FROM Movie as m, Movie as " \
+                   "m2, Actors as a, ActorsMovie as am, ActorsMovie as am2 WHERE m.apiId=%s" \
+                   " AND am.filmId<>am2.filmId AND am.filmId=m.apiId  AND am.actorId=a.actorId" \
+                   " AND am2.filmId=m2.apiId AND am.actorId=am2.actorId AND  m.langId=m2.langId " \
+                   "GROUP BY m2.apiId,m2.title) as commonMovie  , (SELECT distinct m2.apiId as " \
+                   "id, m2.title as title, count(*) as count FROM Movie as m, Movie as m2, Genre " \
+                   "as g  , MoviesGenre as mg, MoviesGenre as mg2 WHERE m.apiId=%s AND mg.apiId<>mg2.apiId" \
+                   " AND  mg.apiId=m.apiId AND mg.genreId=g.genreId AND mg2.apiId=m2.apiId AND" \
+                   " mg.genreId=mg2.genreId  GROUP BY m2.apiId,m2.title) as commonGenre , Movie" \
+                   " m1,PosterMovie pm where commonMovie.count >3 and commonGenre.count>2    " \
+                   "and m1.apiId=commonMovie.id and m1.apiId=commonGenre.id and commonMovie.id= pm.apiId limit 2   "
+        similarMovie = select(sqlQuery, [apiId, apiId])
+        resultS = [{similarMovie['headers'][0]: row[0],
+                    similarMovie['headers'][1]: row[1]} for row in similarMovie['rows']]
+        imagers1 = resultS[0]['image']
+        links1 = resultS[0]['id']
+    except sql_executor.NoResultsException:
+        pass
+    try:
+        sqlQuery = "select distinct m2.apiId ,pm.image from Movie m1,MoviesGenre mg1 , Movie m2, " \
+                   "MoviesGenre     mg2 , PosterMovie pm where  m1.apiId=mg1.apiId and m2.releaseDay " \
+                   "between m1.releaseDay - interval 6 month and m1.releaseDay  and m2.apiId=mg2.apiId " \
+                   "and mg1.genreId=mg2.genreId and m2.langId= m1.langId and m1.apiId=%s and m1.apiId <>m2.apiId and pm.apiId=m2.apiId limit 2"
+        commptiveMovie = select(sqlQuery, apiId)
+        resultM = [{commptiveMovie['headers'][0]: row[0],
+                    commptiveMovie['headers'][1]: row[1]} for row in commptiveMovie['rows']]
+
+        imagerc1 = resultM[0]['image']
+        linkc1 = resultM[0]['apiId']
+        if imagerc1=="":
+            imagerc1= "./static/noimage.png"
+            linkc1=apiId
+        else :
+            imagerc1= "https://image.tmdb.org/t/p/w500/" +imagerc1
+        if imagers1=="":
+            imagers1= "../static/noimage.png"
+            links1=apiId
+        else :
+            imagers1= "https://image.tmdb.org/t/p/w500/" +imagers1
+        return render_template('Movie.html', resultTitle=resultTitle, resultOverview=resultOverview,
+                               resimage=resultimage, resultimdb=resultimdb, length=length, collection=collection,
+                               webSite=webSite, vote=vote, director=director, credit=credit,
+                               imagers1=imagers1, links1=links1, imagerc1=imagerc1, linkc1=linkc1)
+    except sql_executor.NoResultsException:
+        return render_template('Movie.html', resultTitle=resultTitle, resultOverview=resultOverview,
+                               resimage=resultimage, resultimdb=resultimdb, length=length, collection=collection,
+                               webSite=webSite, vote=vote, director=director, credit=credit)
+
+
 
 @app.route('/Credits')
 def Credits():
@@ -300,25 +401,28 @@ def search_foreign_languages():
     if request.method == 'POST':
         title = request.form['dropdown']
 
-    sqlQueryMovie = "select Movie.title from Movie, LanguageMovie, Language where Movie.apiId = LanguageMovie.movieId and Movie.langId = LanguageMovie.languageId and LanguageMovie.languageId = Language.languageId and Language.languageName = %s"
-    sqlQueryShow = "select Shows.title from Shows, LanguageShow, Language where Shows.apiId = LanguageShow.showId and Shows.langId = LanguageShow.languageId and LanguageShow.languageId = Language.languageId and Language.languageName = %s"
+    sqlQueryMovie = "select Movie.title, Movie.popularity from Movie, LanguageMovie, Language where Movie.apiId = LanguageMovie.movieId and Movie.langId = LanguageMovie.languageId and LanguageMovie.languageId = Language.languageId and Language.languageName = %s order by - Movie.popularity"
+    sqlQueryShow = "select Shows.title , Shows.popularity from Shows, LanguageShow, Language where Shows.apiId = LanguageShow.showId and Shows.langId = LanguageShow.languageId and LanguageShow.languageId = Language.languageId and Language.languageName = %s order by - Shows.popularity"
     sqlQuery = "select distinct Language.languageName as language from Language order by language"
     resLang = select(sqlQuery)
     languages = [row[0] for row in resLang["rows"]]
 
     try:
         resMovie = select(sqlQueryMovie, title)
-        resultMovie = [{resMovie['headers'][0]: row[0] } for row in resMovie['rows']]
+        resultMovie = [{resMovie['headers'][0]: row[0] ,
+                        resMovie['headers'][1]: row[1]} for row in resMovie['rows']]
         try:
             resShow = select(sqlQueryShow, title)
-            resultShow = [{resShow['headers'][0]: row[0]} for row in resShow['rows']]
+            resultShow = [{resShow['headers'][0]: row[0],
+                           resShow['headers'][1]: row[1] } for row in resShow['rows']]
             return render_template('Foreign-Languages.html', resMovie=resultMovie, resShow=resultShow, languages=languages)
         except sql_executor.NoResultsException:
             return render_template('Foreign-Languages.html', resMovie=resultMovie, resShow=None, languages=languages)
     except sql_executor.NoResultsException:
         try:
             resShow = select(sqlQueryShow, title)
-            resultShow = [{resShow['headers'][0]: row[0]} for row in resShow['rows']]
+            resultShow = [{resShow['headers'][0]: row[0],
+                           resShow['headers'][1]: row[1] } for row in resShow['rows']]
             return render_template('Foreign-Languages.html', resMovie=None, resShow=resultShow, languages=languages)
         except sql_executor.NoResultsException:
             return render_template('Foreign-Languages.html', languages=languages)

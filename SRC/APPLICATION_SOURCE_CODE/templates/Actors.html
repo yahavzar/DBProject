@@ -8,14 +8,17 @@
     <meta name="page_type" content="np-template-header-footer-from-plugin">
     <title>Actors</title>
     <link rel="stylesheet" href="../static/project/nicepage.css" media="screen">
-<link rel="stylesheet" href="../static/project/Actors.css" media="screen">
+    <link rel="stylesheet" href="../static/project/Actors.css" media="screen">
     <script class="u-script" type="text/javascript" src="../static/project/jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="../static/project/nicepage.js" defer=""></script>
-                <link href="../static/tabulator-master/dist/css/tabulator.min.css" rel="stylesheet">
-<script type="text/javascript" src="../static/tabulator-master/dist/js/tabulator.min.js"></script>
+    <link href="../static/tabulator-master/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="../static/tabulator-master/dist/js/tabulator.min.js"></script>
     <meta name="generator" content="Nicepage 3.3.3, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 
 
@@ -79,7 +82,7 @@
         <h1 class="u-heading-font u-text u-title u-text-1">Recommended Actors</h1>
         <div class="u-clearfix u-custom-html u-custom-html-1">
           <style></style>
-          <p>Choose Genre Name:</p>
+          <p>Enter Genre Name:</p>
             <form action ="" method = "POST">
                 <select name="dropdown">
                     {% for genre in genres %}
@@ -113,7 +116,32 @@
         <h1 class="u-heading-font u-text u-title u-text-1">Known Actors</h1>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
           <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
+                <label for="startDate1">Dates:</label>
+                <input type="text" id="startDate1"  name="startDate1">
+            	<script>
+                    $('#startDate1').daterangepicker({
+                        "minYear": 1902,
+                        "maxYear": 2022,
+                        "showCustomRangeLabel": false,
+                        "startDate": "04/17/1902",
+                        "endDate": "12/15/2022",
+                        "minDate": "04/17/1902",
+                        "maxDate": "12/15/2022",
+                        "opens": "center"
+                    });
+                </script>
+          <div id="known"></div>
+{#            <script>#}
+{#                table= new Tabulator("#known", {#}
+{#                layout:"fitColumns",#}
+{#                height: "311px",#}
+{#                placeholder:"No Data Set",#}
+{#                    columns: [#}
+{#                        {title: "Actor's Name",field:"title"}],#}
+{#                });#}
+{#                var rows = {{ res |safe }}#}
+{#                    table.setData(rows);#}
+{#            </script>#}
         </div>
       </div>
     </section>
