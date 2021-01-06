@@ -141,8 +141,20 @@
         <h5 class="u-text u-text-2">Actors + Producers</h5>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
           <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
-        </div>
+ <div id="Winning_Combo_Shows"></div>
+<script>
+    table= new Tabulator("#Winning_Combo_Shows", {
+    layout:"fitColumns",
+    height: "311px",
+    placeholder:"No Data Set",
+        columns: [
+           {title: "Actor Name",field:"actorName"},
+            {title: "Producer Name",field:"producerName"},
+            {title: "Num Of Shows",field:"count(*)"}],
+    });
+    var rows = {{ res4 |safe }}
+        table.setData(rows);
+            </script>         </div>
       </div>
     </section>
     
