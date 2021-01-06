@@ -249,8 +249,17 @@ def Credits():
                "d.directorId=dm.directorId and am.filmId=dm.filmId and m.apiId=am.filmId " \
                "and m.voteAvg>5 group by a.actorName,d.directorName Having count(*)>7"
     res3 = select(sqlQuery)
-    result3 = [{res3['headers'][0]: row[0], res3['headers'][1]: row[1], res3['headers'][2]: row[2]} for row in res3['rows']]
-    return render_template('Credits.html', res=json.dumps(result),res2=json.dumps(result2),res3=json.dumps(result3))
+    result3 = [{res3['headers'][0]: row[0], res3['headers'][1]: row[1], res3['headers'][2]: row[2]} for row in
+               res3['rows']]
+    sqlQuery = "select a.actorName,p.producerName, count(*) from Actors a,  ActorsShow acs" \
+               ",Producers p,ProducersShow ps , Shows s where a.actorId= acs.actorId and " \
+               " p.producerId=ps.producerId and acs.actorId=ps.showId and s.apiId=ps.showId " \
+               "and s.voteAvg>5 group by a.actorName,p.producerName Having count(*)>7"
+    res4 = select(sqlQuery)
+    result4 = [{res4['headers'][0]: row[0], res4['headers'][1]: row[1], res4['headers'][2]: row[2]} for row in
+               res4['rows']]
+    return render_template('Credits.html', res=json.dumps(result), res2=json.dumps(result2), res3=json.dumps(result3),
+                           res4=json.dumps(result4))
 
 @app.route('/Actors')
 def Actors():
