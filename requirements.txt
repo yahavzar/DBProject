@@ -14,7 +14,6 @@ idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
-mysqlclient @ file:///C:/Users/yahav/Desktop/mysqlclient-1.4.6-cp39-cp39-win32.whl
 nanodb==0.4.3
 nanodb-driver==0.0.3
 pycparser==2.20
