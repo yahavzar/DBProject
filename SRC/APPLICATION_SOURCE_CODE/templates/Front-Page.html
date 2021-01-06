@@ -131,28 +131,54 @@
 </header>
 <section class="u-align-left u-clearfix u-image u-shading u-section-1" id="carousel_84db">
     <div class="u-clearfix u-sheet u-valign-middle-xs u-sheet-1">
-        <div class="u-clearfix u-custom-html u-custom-html-1">
-            <style></style>
-            <form action ="" method = "POST">
-                <input class="u-border-2 u-border-grey-30 u-input u-input-rectangle u-white"
-                       placeholder="Insert a movie name and view similar TV shows"
-                       type=”text” name=movieTitle value={{request.form.movieTitle | safe}}>
-                <button class="u-border-2 u-border-black u-btn u-btn-round u-btn-submit u-button-style u-hover-black u-palette-5-dark-2
-                   u-radius-44 u-text-black u-text-hov  er-white u-btn-1" type=”submit”> Submit </button>
+        <div class="u-form u-form-1">
+            <form action ="" method = "POST"
+                  class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form"
+                  style="padding: 10px;" >
+                <div class="u-form-group u-form-name">
+                    <label for="name-a9ba" class="u-form-control-hidden u-label">Name</label>
+                    <input type="text" id="name-a9ba"
+                           class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""
+                           placeholder="Insert a movie name and view similar TV shows"
+                    name=movieTitle value={{request.form.movieTitle | safe}}>
+                </div>
+                <div class="u-align-center u-form-group u-form-submit">
+                    <a href="#"
+                       class="u-border-2 u-border-black u-btn u-btn-round u-btn-submit u-button-style u-hover-black u-palette-5-dark-2 u-radius-44 u-text-black u-text-hover-white u-btn-1">Submit</a>
+                    <input type="submit" value="submit" class="u-form-control-hidden">
+                </div>
+                <div class="u-form-send-message u-form-send-success">Thank you! Your message has been sent.</div>
+                <div class="u-form-send-error u-form-send-message">Unable to send your message. Please fix errors then
+                    try again.
+                </div>
+                <input type="hidden" value="" name="recaptchaResponse">
             </form>
         </div>
-     <div class="u-clearfix u-custom-html u-custom-html-1">
-            <style></style>
-            <form action ="" method = "POST">
-                <input class="u-border-2 u-border-grey-30 u-input u-input-rectangle u-white"
-                       placeholder="Insert a movie name and view similar TV shows"
-                       type=”text” name=showTitle value={{request.form.showTitle | safe}}>
-                <button class="u-border-2 u-border-black u-btn u-btn-round u-btn-submit u-button-style u-hover-black u-palette-5-dark-2
-                   u-radius-44 u-text-black u-text-hov  er-white u-btn-1" type=”submit”> Submit </button>
+        <div class="u-form u-form-2">
+            <form action="" method="POST"
+                  class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form"
+                  style="padding: 10px">
+                <div class="u-form-group u-form-name">
+                    <label for="name-a9ba" class="u-form-control-hidden u-label">Name</label>
+                    <input type="text" placeholder="Insert a TV show name and view similar movies" id="name-a9ba"
+                            class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"
+                           required="" name=showTitle value={{request.form.showTitle | safe}}>
+                </div>
+                <div class="u-align-center u-form-group u-form-submit">
+                    <a href="#"
+                       class="u-border-2 u-border-black u-btn u-btn-round u-btn-submit u-button-style u-hover-black u-palette-5-dark-2 u-radius-50 u-text-black u-text-hover-white u-btn-2">Submit</a>
+                    <input type="submit" value="submit" class="u-form-control-hidden">
+                </div>
+                <div class="u-form-send-message u-form-send-success"> Thank you! Your message has been sent.</div>
+                <div class="u-form-send-error u-form-send-message"> Unable to send your message. Please fix errors then
+                    try again.
+                </div>
+                <input type="hidden" value="" name="recaptchaResponse">
             </form>
         </div>
     </div>
 </section>
+
 <section class="u-align-center u-clearfix u-section-2" src="" id="carousel_c244">
     <div class="u-clearfix u-sheet u-sheet-1">
         <h1 class="u-heading-font u-text u-title u-text-1">Movies</h1>

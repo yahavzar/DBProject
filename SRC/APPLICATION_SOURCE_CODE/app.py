@@ -21,7 +21,7 @@ def index():
                 print("Movie Title = ", movieTitle)
                 showApiId = search_similar_show(movieTitle)
                 if showApiId == 0:
-                    return render_template("Front-Page.html")
+                    return redirect("/")
                 route = "/tvshow/" + str(showApiId)
                 print("route =",route)
                 return redirect(route, code=302)
@@ -31,7 +31,7 @@ def index():
                 print("Show Title = ", showTitle)
                 movieApiId = search_similar_movie(showTitle)
                 if movieApiId == 0:
-                    return render_template("Front-Page.html")
+                    return redirect("/")
                 route = "/movie/" + str(movieApiId)
                 print("route =", route)
                 return redirect(route, code=302)
@@ -92,8 +92,6 @@ def search_similar_show(title):
     if movieApiId == None:
         return 0
     print("movieApiId = ", movieApiId)
-
-
     sqlQuery = " select distinct countActors.title" \
                " from (SELECT m2.apiId as id, m2.title as title, count(*) as sharedActors from" \
                " Movie as m, Shows as m2, Actors as a, ActorsMovie as am, ActorsShow as am2" \
@@ -167,6 +165,7 @@ def get_show_apiId(title):
         return res['rows'][0][0]
     except sql_executor.NoResultsException:
         return None
+    
 @app.route("/Search-Movies-or-TV-Shows")
 def serach_movie_ortv():
     return render_template('Search-Movies-or-TV-Shows.html')
