@@ -287,9 +287,42 @@ def search_recommended_actors():
         result2 = [k[0] for k in res2["rows"]]
         return render_template('Actors.html', genres=result2)
 
+
 @app.route('/Foreign-Languages')
 def Foreign_Languages():
-    return render_template('Foreign-Languages.html')
+    sqlQurey = "select distinct Language.languageName as language from Language order by language DESC"
+    res = select(sqlQurey)
+    result = [row[0] for row in res['rows']]
+    return render_template('Foreign-Languages.html', languages=result)
+
+@app.route("/Foreign-Languages",methods=['POST','GET'])
+def search_foreign_languages():
+    if request.method == 'POST':
+        title = request.form['dropdown']
+
+    sqlQueryMovie = "select Movie.title from Movie, LanguageMovie, Language where Movie.apiId = LanguageMovie.movieId and Movie.langId = LanguageMovie.languageId and LanguageMovie.languageId = Language.languageId and Language.languageName = %s"
+    sqlQueryShow = "select Shows.title from Shows, LanguageShow, Language where Shows.apiId = LanguageShow.showId and Shows.langId = LanguageShow.languageId and LanguageShow.languageId = Language.languageId and Language.languageName = %s"
+    sqlQuery = "select distinct Language.languageName as language from Language order by language"
+    resLang = select(sqlQuery)
+    languages = [row[0] for row in resLang["rows"]]
+
+    try:
+        resMovie = select(sqlQueryMovie, title)
+        resultMovie = [{resMovie['headers'][0]: row[0] } for row in resMovie['rows']]
+        try:
+            resShow = select(sqlQueryShow, title)
+            resultShow = [{resShow['headers'][0]: row[0]} for row in resShow['rows']]
+            return render_template('Foreign-Languages.html', resMovie=resultMovie, resShow=resultShow, languages=languages)
+        except sql_executor.NoResultsException:
+            return render_template('Foreign-Languages.html', resMovie=resultMovie, resShow=None, languages=languages)
+    except sql_executor.NoResultsException:
+        try:
+            resShow = select(sqlQueryShow, title)
+            resultShow = [{resShow['headers'][0]: row[0]} for row in resShow['rows']]
+            return render_template('Foreign-Languages.html', resMovie=None, resShow=resultShow, languages=languages)
+        except sql_executor.NoResultsException:
+            return render_template('Foreign-Languages.html', languages=languages)
+
 
 @app.route('/testmoce')
 def movie_to_html():
