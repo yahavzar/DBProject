@@ -10,10 +10,36 @@ from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import *
 app = Flask(__name__)
 
 
-@app.route('/')
-@app.route('/movie')
-@app.route('/tvshow')
+@app.route('/', methods=['POST','GET'])
+@app.route('/movie', methods=['POST','GET'])
+@app.route('/tvshow', methods=['POST','GET'])
 def index():
+    if request.method == 'POST':
+        try:
+            movieTitle = request.form['movieTitle']
+            if movieTitle != None:
+                print("Movie Title = ", movieTitle)
+                showApiId = search_similar_show(movieTitle)
+                if showApiId == 0:
+                    return render_template("Front-Page.html")
+                route = "/tvshow/" + str(showApiId)
+                print("route =",route)
+                return redirect(route, code=302)
+        except:
+            showTitle = request.form['showTitle']
+            if showTitle != None:
+                print("Show Title = ", showTitle)
+                movieApiId = search_similar_movie(showTitle)
+                if movieApiId == 0:
+                    return render_template("Front-Page.html")
+                route = "/movie/" + str(movieApiId)
+                print("route =", route)
+                return redirect(route, code=302)
+
+        # else:
+        #     showTitle = request.form['showTitle']
+        #     print("Show Title = ", showTitle)
+
 
     sqlQuery = "select  m.apiId , pm.image from Movie m, ( select avg(voteCount) as " \
                "avg from Movie) as avgVoteCount , ( select avg(voteAvg) as avg from Movie)" \
@@ -25,11 +51,11 @@ def index():
     res = select(sqlQuery)
     result = [{res['headers'][0]: row[0],
                  res['headers'][1]: row[1]} for row in res['rows']]
-    image0= result[0]['image']
-    image1= result[1]['image']
-    image2= result[2]['image']
-    image3= result[3]['image']
-    image4= result[4]['image']
+    image0 = result[0]['image']
+    image1 = result[1]['image']
+    image2 = result[2]['image']
+    image3 = result[3]['image']
+    image4 = result[4]['image']
     link0 = result[0]['apiId']
     link1 = result[1]['apiId']
     link2 = result[2]['apiId']
@@ -40,7 +66,7 @@ def index():
     sqlQuery=" select  m.apiId , pm.image from Shows m, ( select avg(voteCount) " \
              "as avg from Shows) as avgVoteCount , ( select avg(voteAvg) as avg from" \
              " Shows)  as avgVoteavg , ( select avg(popularity) as avg from Shows) as " \
-             "avgPopularity   , PosterShow pm where                m.voteCount>=avgVoteCount.avg" \
+             "avgPopularity   , PosterShow pm where m.voteCount>=avgVoteCount.avg" \
              " and m.voteAvg>=avgVoteavg.avg and m.popularity>=avgPopularity.avg           " \
              "      and m.releaseDay between '2020-01-01' and '2021-01-01' and   pm.apiId=m.apiId " \
              "and pm.image is not null limit 5"
@@ -60,7 +86,87 @@ def index():
     return render_template('Front-Page.html',image0=image0,image1=image1,image2=image2,image3=image3,image4=image4,link0=link0,link1=link1,link2=link2,link3=link3,link4=link4,
                            imageShow0=imageShow0,imageShow1=imageShow1,imageShow2=imageShow2,imageShow3=imageShow3,imageShow4=imageShow4,Imagelink0=Imagelink0,Imagelink1=Imagelink1
                            ,Imagelink2=Imagelink2,Imagelink3=Imagelink3,Imagelink4=Imagelink4)
+def search_similar_show(title):
+    # Get Movie title id
+    movieApiId = get_movie_apiId(title)
+    if movieApiId == None:
+        return 0
+    print("movieApiId = ", movieApiId)
 
+
+    sqlQuery = " select distinct countActors.title" \
+               " from (SELECT m2.apiId as id, m2.title as title, count(*) as sharedActors from" \
+               " Movie as m, Shows as m2, Actors as a, ActorsMovie as am, ActorsShow as am2" \
+               " where m.apiId=%s and m.langId=m2.langId  and am.filmId=m.apiId and am.actorId=a.actorId" \
+               " and am2.showId=m2.apiId and am.actorId=am2.actorId group by m2.apiId) as countActors," \
+               " (select distinct m2.apiId as id, m2.title as title, count(*) as sharedGenres" \
+               " from  Movie as m, Shows as m2, Genre as g, MoviesGenre as mg, ShowGenre as mg2" \
+               " WHERE m.apiId=%s and m.langId=m2.langId  and mg.apiId=m.apiId and mg.genreId=g.genreId" \
+               " and mg2.apiId=m2.apiId and mg.genreId=mg2.genreId group by m2.apiId) as" \
+               " countGenres, Shows m1 where countActors.sharedActors >= 1 and countGenres.sharedGenres >= 1" \
+               " and m1.apiId=countActors.id and m1.apiId=countGenres.id"
+    res = select(sqlQuery, [movieApiId, movieApiId])
+    print(res)
+    print(res['rows'][0][0])
+    tvTitle = res['rows'][0][0]
+    # Search for similar show id
+    showApiId = get_show_apiId(tvTitle)
+    print("showApiId = ", showApiId)
+    if showApiId == None:
+        print("WASDASDASD")
+        return 0
+    return showApiId
+
+
+def search_similar_movie(title):
+    # Get Show title id
+    print("seach movieee")
+    showApiId = get_show_apiId(title)
+    if showApiId == None:
+        return 0
+    print("movieApiId = ", showApiId)
+
+    sqlQuery = "select distinct countActors.title from (SELECT m2.apiId as id, m2.title as title, " \
+               "count(*) as sharedActors from  Shows as m, Movie as m2, Actors as a," \
+               " ActorsShow as am, ActorsMovie as am2 where m.apiId=%s and m.langId=m2.langId " \
+               "and am.showId=m.apiId AND am.actorId=a.actorId and am2.filmId=m2.apiId and am.actorId=am2.actorId" \
+               " group by m2.apiId,m2.title) as countActors, (select distinct m2.apiId as id, m2.title as title, count(*)" \
+               " as sharedGenres from  Shows as m, Movie as m2, Genre as g, ShowGenre as mg, MoviesGenre as mg2" \
+               " where m.apiId=%s and m.langId=m2.langId and mg.apiId=m.apiId and mg.genreId=g.genreId and " \
+               "mg2.apiId=m2.apiId and mg.genreId=mg2.genreId group by  m2.apiId,m2.title) as countGenres, Movie m1 " \
+               "where countActors.sharedActors >= 1 and countGenres.sharedGenres >=1 and m1.apiId=countActors.id and m1.apiId=countGenres.id"
+
+    res = select(sqlQuery, [showApiId, showApiId])
+    print(res)
+    print(res['rows'][0][0])
+    movieTitle = res['rows'][0][0]
+    # Search for similar show id
+    movieApiId = get_movie_apiId(movieTitle)
+    print("movieApiId = ", movieApiId)
+    if movieApiId == None:
+        print("WASDASDASD")
+        return 0
+    return movieApiId
+
+
+def get_movie_apiId(title):
+    try:
+        sqlQuery = " select m.apiId" \
+                   " from Movie m where m.title = %s"
+        res = select(sqlQuery, title)
+        return res['rows'][0][0]
+    except sql_executor.NoResultsException:
+        return None
+
+def get_show_apiId(title):
+    print("in func title = ", title)
+    try:
+        sqlQuery = " select s.apiId" \
+                   " from Shows s where s.title = %s"
+        res = select(sqlQuery, title)
+        return res['rows'][0][0]
+    except sql_executor.NoResultsException:
+        return None
 @app.route("/Search-Movies-or-TV-Shows")
 def serach_movie_ortv():
     return render_template('Search-Movies-or-TV-Shows.html')
