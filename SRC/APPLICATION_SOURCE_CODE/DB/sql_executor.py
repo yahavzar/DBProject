@@ -30,20 +30,6 @@ def select(query, args=None):
             cursor.close()
 
 
-def insert(query, args=None):
-    cursor = None
-    try:
-        cursors = __execute(queries=[{'query': query, 'args': args}])
-        cursor = cursors[0]
-        response = cursor.fetchall()
-        return response
-    except Exception:
-        raise Exception('Insert query failed. Query: {} Error Traceback: {}'.format(query, traceback.format_exc()))
-    finally:
-        if cursor:
-            cursor.close()
-
-
 def __execute(queries):
     """
     Private function, should be accessed by one of the functions above
