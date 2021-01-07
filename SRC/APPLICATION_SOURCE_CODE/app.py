@@ -419,12 +419,14 @@ def search_return_html():
 
 @app.route('/Credits')
 def Credits():
-    sqlQuery = "select directorName from Directors   "
+    sqlQuery="select d.directorName , count(*) from Directors d , DirectorsMovie dm where  d.directorId=dm.directorId group by d.directorId order by -count(*)"
     res = select(sqlQuery)
-    result = [{res['headers'][0]: row[0]} for row in res['rows']]
-    sqlQuery = "select producerName from Producers   "
+    result = [{res['headers'][0]: row[0],
+               res['headers'][1]: row[1]} for row in res['rows']]
+    sqlQuery = "select p.producerName , count(*) from Producers p , ProducersShow ps where  p.producerId=ps.producerId group by p.producerId order by -count(*)"
     res2 = select(sqlQuery)
-    result2 = [{res2['headers'][0]: row[0]} for row in res2['rows']]
+    result2 =[{res2['headers'][0]: row[0],
+               res2['headers'][1]: row[1]} for row in res2['rows']]
     sqlQuery = "select a.actorName,d.directorName, count(*) from Actors a, ActorsMovie am" \
                ",Directors d,DirectorsMovie dm , Movie m where a.actorId= am.actorId and " \
                "d.directorId=dm.directorId and am.filmId=dm.filmId and m.apiId=am.filmId " \

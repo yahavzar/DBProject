@@ -86,7 +86,8 @@
     height: "311px",
     placeholder:"No Data Set",
         columns: [
-            {title: "Director Name",field:"directorName"}],
+            {title: "Director Name",field:"directorName"}
+            ,{title:"Num of Movies", field :"count(*)"}],
     });
     var rows = {{ res |safe }}
         table.setData(rows);
@@ -106,8 +107,8 @@
     height: "311px",
     placeholder:"No Data Set",
         columns: [
-            {title: "Producers Name",field:"producerName"}],
-    });
+            {title: "Producers Name",field:"producerName"}
+            ,{title:"Num of Shows", field :"count(*)"}],});
     var rows = {{ res2 |safe }}
         table.setData(rows);
             </script>           </div>

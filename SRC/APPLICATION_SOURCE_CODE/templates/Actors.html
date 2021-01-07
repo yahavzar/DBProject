@@ -100,8 +100,8 @@
                             columns: [
                                 {title: "Actor's Name",field:"title"}],
                         });
-                        var rows = {{ res |safe }}
-                            table.setData(rows);
+                        var rows1 = {{ res |safe }}
+                            table.setData(rows1);
                     </script>
         </div>
           <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-2">
@@ -135,15 +135,15 @@
                 </form>
           <div id="known"></div>
             <script>
-                table= new Tabulator("#known", {
+                table1= new Tabulator("#known", {
                 layout:"fitColumns",
                 height: "311px",
                 placeholder:"No Data Set",
                     columns: [
                         {title: "Actor's Name",field:"title"}],
                 });
-                var rows = {{ resKnown |safe }}
-                    table.setData(rows);
+                var rows2 = {{ resKnown |safe }}
+                    table1.setData(rows2);
             </script>
         </div>
       </div>
@@ -173,15 +173,15 @@
                 </form>
             <div id="successful"></div>
             <script>
-                table= new Tabulator("#successful", {
+                table2= new Tabulator("#successful", {
                 layout:"fitColumns",
                 height: "311px",
                 placeholder:"No Data Set",
                     columns: [
                         {title: "Actor's Name",field:"title"}],
                 });
-                var rows = {{ resSuc |safe }}
-                    table.setData(rows);
+                var rows3 = {{ resSuc |safe }}
+                    table2.setData(rows3);
             </script>
           </div>
       </div>
@@ -202,13 +202,13 @@
             </form>
             <div id="movie"></div>
             <script>
-                table= new Tabulator("#movie", {
+                table3= new Tabulator("#movie", {
                 layout:"fitColumns",
                 height: "311px",
                 placeholder:"No Data Set",
                 columns: [ {title: "Title",field:"title"}],});
-                var rows = {{ resNames |safe }}
-                table.setData(rows);
+                var rows4 = {{ resNames |safe }}
+                table3.setData(rows4);
             </script>
         </div>
       </div>
