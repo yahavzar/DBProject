@@ -113,57 +113,103 @@
     </section>
     <section class="u-clearfix u-section-2" id="sec-5fed">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <h1 class="u-heading-font u-text u-title u-text-1">Known Actors</h1>
+        <h1 class="u-heading-font u-text u-title u-text-1" id="try">Known Actors</h1>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
+            <p></p>
           <style></style>
-                <label for="startDate1">Dates:</label>
-                <input type="text" id="startDate1"  name="startDate1">
-            	<script>
-                    $('#startDate1').daterangepicker({
-                        "minYear": 1902,
-                        "maxYear": 2022,
-                        "showCustomRangeLabel": false,
-                        "startDate": "04/17/1902",
-                        "endDate": "12/15/2022",
-                        "minDate": "04/17/1902",
-                        "maxDate": "12/15/2022",
-                        "opens": "center"
-                    });
-                </script>
+                <form action ="" method = "POST">
+                    <input type="text" id="startDate1"  name="startDate1">
+                    <script>
+                        $('#startDate1').daterangepicker({
+                            "minYear": 1902,
+                            "maxYear": 2022,
+                            "startDate": "04/17/1902",
+                            "endDate": "12/15/2022",
+                            "minDate": "04/17/1902",
+                            "maxDate": "12/15/2022",
+                            "opens": "center"
+                        }, function(start, end) {
+                        });
+                    </script>
+	                <button type=”submit”> Submit </button>
+                </form>
           <div id="known"></div>
-{#            <script>#}
-{#                table= new Tabulator("#known", {#}
-{#                layout:"fitColumns",#}
-{#                height: "311px",#}
-{#                placeholder:"No Data Set",#}
-{#                    columns: [#}
-{#                        {title: "Actor's Name",field:"title"}],#}
-{#                });#}
-{#                var rows = {{ res |safe }}#}
-{#                    table.setData(rows);#}
-{#            </script>#}
+            <script>
+                table= new Tabulator("#known", {
+                layout:"fitColumns",
+                height: "311px",
+                placeholder:"No Data Set",
+                    columns: [
+                        {title: "Actor's Name",field:"title"}],
+                });
+                var rows = {{ resKnown |safe }}
+                    table.setData(rows);
+            </script>
         </div>
       </div>
     </section>
     <section class="u-clearfix u-section-3" id="sec-3eed">
       <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
-          <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
         </div>
         <h1 class="u-heading-font u-text u-title u-text-1">Successful Actors</h1>
+          <div>
+                  <style></style>
+                <form action ="" method = "POST">
+                    <input type="text" id="startDate2"  name="startDate2">
+                    <script>
+                        $('#startDate2').daterangepicker({
+                            "minYear": 1902,
+                            "maxYear": 2022,
+                            "startDate": "04/17/1902",
+                            "endDate": "12/15/2022",
+                            "minDate": "04/17/1902",
+                            "maxDate": "12/15/2022",
+                            "opens": "center"
+                        }, function(start, end) {
+                        });
+                    </script>
+	                <button type=”submit”> Submit </button>
+                </form>
+            <div id="successful"></div>
+            <script>
+                table= new Tabulator("#successful", {
+                layout:"fitColumns",
+                height: "311px",
+                placeholder:"No Data Set",
+                    columns: [
+                        {title: "Actor's Name",field:"title"}],
+                });
+                var rows = {{ resSuc |safe }}
+                    table.setData(rows);
+            </script>
+          </div>
       </div>
+
     </section>
     <section class="u-clearfix u-section-4" id="sec-2416">
       <div class="u-clearfix u-sheet u-sheet-1">
         <h1 class="u-heading-font u-text u-title u-text-1">Movies by Actors</h1>
         <div class="u-clearfix u-custom-html u-custom-html-1">
           <style></style>
-          <p>Put input here</p>
+          <p>Enter Actor's Name:</p>
         </div>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-2">
           <style></style>
-          <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
+            <form action ="" method = "POST">
+                <input type=”text” name=actorName value={{request.form.actorName | safe}}>
+                <button type=”submit”> Submit </button>
+            </form>
+            <div id="movie"></div>
+            <script>
+                table= new Tabulator("#movie", {
+                layout:"fitColumns",
+                height: "311px",
+                placeholder:"No Data Set",
+                columns: [ {title: "Title",field:"title"}],});
+                var rows = {{ resNames |safe }}
+                table.setData(rows);
+            </script>
         </div>
       </div>
     </section>
