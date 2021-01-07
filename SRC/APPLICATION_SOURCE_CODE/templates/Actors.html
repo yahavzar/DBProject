@@ -100,8 +100,8 @@
                             columns: [
                                 {title: "Actor's Name",field:"title"}],
                         });
-                        var rows1 = {{ res |safe }}
-                            table.setData(rows1);
+                        var rows = {{ res |safe }}
+                            table.setData(rows);
                     </script>
         </div>
           <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-2">
@@ -121,6 +121,7 @@
                     <input type="text" id="startDate1"  name="startDate1">
                     <script>
                         $('#startDate1').daterangepicker({
+                            "showDropdowns": true,
                             "minYear": 1902,
                             "maxYear": 2022,
                             "startDate": "04/17/1902",
@@ -128,10 +129,9 @@
                             "minDate": "04/17/1902",
                             "maxDate": "12/15/2022",
                             "opens": "center"
-                        }, function(start, end) {
                         });
                     </script>
-	                <button type=”submit”> Submit </button>
+	                <button type=”submit” name="startDate1"> Submit </button>
                 </form>
           <div id="known"></div>
             <script>
@@ -142,8 +142,8 @@
                     columns: [
                         {title: "Actor's Name",field:"title"}],
                 });
-                var rows2 = {{ resKnown |safe }}
-                    table1.setData(rows2);
+                var rows1 = {{ resKnown |safe }}
+                    table1.setData(rows1);
             </script>
         </div>
       </div>
@@ -159,6 +159,7 @@
                     <input type="text" id="startDate2"  name="startDate2">
                     <script>
                         $('#startDate2').daterangepicker({
+                            "showDropdowns": true,
                             "minYear": 1902,
                             "maxYear": 2022,
                             "startDate": "04/17/1902",
@@ -166,10 +167,9 @@
                             "minDate": "04/17/1902",
                             "maxDate": "12/15/2022",
                             "opens": "center"
-                        }, function(start, end) {
                         });
                     </script>
-	                <button type=”submit”> Submit </button>
+	                <button type=”submit” name="startDate2"> Submit </button>
                 </form>
             <div id="successful"></div>
             <script>
@@ -180,8 +180,8 @@
                     columns: [
                         {title: "Actor's Name",field:"title"}],
                 });
-                var rows3 = {{ resSuc |safe }}
-                    table2.setData(rows3);
+                var rows2 = {{ resSuc |safe }}
+                    table2.setData(rows2);
             </script>
           </div>
       </div>
@@ -197,8 +197,8 @@
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-2">
           <style></style>
             <form action ="" method = "POST">
-                <input type=”text” name=actorName value={{request.form.actorName | safe}}>
-                <button type=”submit”> Submit </button>
+                <input type=”text” name=actorName required value={{request.form.actorName | safe}}>
+                <button type=”submit” name="actors"> Submit </button>
             </form>
             <div id="movie"></div>
             <script>
@@ -207,8 +207,8 @@
                 height: "311px",
                 placeholder:"No Data Set",
                 columns: [ {title: "Title",field:"title"}],});
-                var rows4 = {{ resNames |safe }}
-                table3.setData(rows4);
+                var rows3 = {{ resNames |safe }}
+                table3.setData(rows3);
             </script>
         </div>
       </div>
