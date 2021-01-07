@@ -547,7 +547,7 @@ def search_recommended_actors():
 
 @app.route('/Foreign-Languages')
 def Foreign_Languages():
-    sqlQurey = "select distinct Language.languageName as language from Language order by language DESC"
+    sqlQurey = "select distinct Language.langName as language from Language order by language DESC"
     res = select(sqlQurey)
     result = [row[0] for row in res['rows']]
     return render_template('Foreign-Languages.html', languages=result)
@@ -557,9 +557,9 @@ def search_foreign_languages():
     if request.method == 'POST':
         title = request.form['dropdown']
 
-    sqlQueryMovie = "select Movie.title, Movie.popularity from Movie, LanguageMovie, Language where Movie.apiId = LanguageMovie.movieId and Movie.langId = LanguageMovie.languageId and LanguageMovie.languageId = Language.languageId and Language.languageName = %s order by - Movie.popularity"
-    sqlQueryShow = "select Shows.title , Shows.popularity from Shows, LanguageShow, Language where Shows.apiId = LanguageShow.showId and Shows.langId = LanguageShow.languageId and LanguageShow.languageId = Language.languageId and Language.languageName = %s order by - Shows.popularity"
-    sqlQuery = "select distinct Language.languageName as language from Language order by language"
+    sqlQueryMovie = "select m.title,m.popularity from Movie m , Language l where  m.langId=l.languageId  and l.LangName= %s order by - m.popularity"
+    sqlQueryShow = "select s.title , s.popularity from Shows  s, Language l where  s.langId = l.languageId and l.langName = %s order by - s.popularity"
+    sqlQuery = "select distinct Language.langName as language from Language order by language DESC"
     resLang = select(sqlQuery)
     languages = [row[0] for row in resLang["rows"]]
 
