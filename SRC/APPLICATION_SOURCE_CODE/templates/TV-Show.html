@@ -93,6 +93,10 @@
                   <div class="u-border-9 u-border-black u-line u-line-horizontal u-line-1"></div>
                   <h2 class="u-text u-text-1">{{ resultTitle | safe}}</h2>
                   <p class="u-text u-text-2">{{ resultOverview | safe}}</p>
+                     <p><b>Length</b> : {{ length |safe }}</p>
+                    <p> <b>Seasons :</b>{{ seasons |safe }}</p>
+                    <p>{{ webSite| safe }}</p>
+                    <p><b>Vote Average</b> : {{ vote | safe }}  <img src="../static/star-icon.png"  width="16" height="16"> </p>
                   <div class="u-border-9 u-border-black u-line u-line-horizontal u-line-2"></div>
                 </div>
               </div>
@@ -104,12 +108,14 @@
     <section class="u-clearfix u-section-2" id="sec-2a6e">
       <div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-text u-text-1">Cast&nbsp; and Producer</p>
+            <p>{{ producer|safe }}</p>
+                    <p>{{ credit|safe }}</p>
       </div>
     </section>
     <section class="u-black u-clearfix u-section-3" id="sec-2427">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <h2 class="u-heading-font u-subtitle u-text u-text-default u-text-1">Competiting Movies</h2>
-        <h2 class="u-heading-font u-subtitle u-text u-text-default u-text-2">Similiar Movies</h2>
+        <h2 class="u-heading-font u-subtitle u-text u-text-default u-text-1">Competiting Show</h2>
+        <h2 class="u-heading-font u-subtitle u-text u-text-default u-text-2">Similiar Show</h2>
         <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
           <div class="u-gutter-0 u-layout">
             <div class="u-layout-row">
@@ -117,7 +123,9 @@
                 <div class="u-container-layout u-container-layout-1">
                   <div class="u-clearfix u-custom-html u-custom-html-1">
                     <style></style>
-                    <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
+                     <a href="/tvshow/{{ links1| safe }}">
+                                          <img src = "{{ imagers1 |safe }}"  width="400" height="400">
+                                                    </a>
                   </div>
                 </div>
               </div>
@@ -125,15 +133,16 @@
                 <div class="u-container-layout u-container-layout-2">
                   <div class="u-clearfix u-custom-html u-custom-html-2">
                     <style></style>
-                    <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
                   </div>
                 </div>
               </div>
               <div class="u-container-style u-layout-cell u-size-15 u-size-30-md u-layout-cell-3">
                 <div class="u-container-layout u-container-layout-3">
                   <div class="u-clearfix u-custom-html u-custom-html-3">
+                      <a href="/tvshow/{{ linkc1| safe }}">
+                                          <img src = "{{ imagerc1 |safe }}"  width="400" height="400">
+                                                    </a>
                     <style></style>
-                    <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
                   </div>
                 </div>
               </div>
@@ -141,7 +150,6 @@
                 <div class="u-container-layout u-container-layout-4">
                   <div class="u-clearfix u-custom-html u-custom-html-4">
                     <style></style>
-                    <p>Sample HTML. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p>
                   </div>
                 </div>
               </div>
