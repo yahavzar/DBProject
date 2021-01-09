@@ -42,7 +42,7 @@ def search_return_html():
             apiId = resultapi[0]['apiId']
             return redirect("tvshow/" + str(apiId))
         except sql_executor.NoResultsException:
-            render_template("Error.html")
+            return render_template("Error.html")
 
 
 

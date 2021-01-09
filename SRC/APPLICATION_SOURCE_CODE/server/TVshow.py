@@ -92,6 +92,8 @@ def TV_Show(apiId):
                     similarShow['headers'][1]: row[1]} for row in similarShow['rows']]
         shuffle(resultS)
         imagers1 = resultS[0]['image']
+        if imagers1==None:
+            imagers1=""
         links1 = resultS[0]['id']
     except sql_executor.NoResultsException:
         pass
