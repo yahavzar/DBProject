@@ -2,9 +2,7 @@ import pymysql
 import json
 import traceback
 
-from sshtunnel import SSHTunnelForwarder
 
-from SRC.APPLICATION_SOURCE_CODE.config import *
 
 
 def select(query, args=None):
@@ -31,49 +29,6 @@ def select(query, args=None):
 
 
 def __execute(queries):
-    """
-    Private function, should be accessed by one of the functions above
-    USE_SSH flag in config.py is set to True when running the app locally
-    :param queries: list of dictionaries: [{'query': 'select...', 'args': {}}...]
-    :return: list of cursors after cursor.execute
-    """
-    if USE_SSH:
-        return __execute_ssh(queries)
-    else:
-        return __execute_no_ssh(queries)
-
-
-def __execute_ssh(queries):
-    sql_hostname, sql_username, sql_password, sql_main_database, sql_port = get_mysql_config()
-    with open("./DB/config/ssh_config.json") as ssh_conf_file:
-        ssh_conf = json.load(ssh_conf_file)
-        ssh_host = ssh_conf['ssh_host']
-        ssh_user = ssh_conf['ssh_user']
-        ssh_password = ssh_conf['ssh_password']
-        ssh_port = ssh_conf['ssh_port']
-
-    with SSHTunnelForwarder(
-            (ssh_host, ssh_port),
-            ssh_username=ssh_user,
-            ssh_password=ssh_password,
-            remote_bind_address=(sql_hostname, sql_port)) as tunnel:
-        ssh_conf_file.close()
-        db = pymysql.connect(host='127.0.0.1',
-                             user=sql_username,
-                             passwd=sql_password,
-                             db=sql_main_database,
-                             port=tunnel.local_bind_port)
-
-        cursors = []
-        for query in queries:
-            cur = db.cursor(pymysql.cursors.DictCursor)
-            cur.execute(query=query['query'], args=query.get('args', None))
-            db.commit()
-            cursors.append(cur)
-    return cursors
-
-
-def __execute_no_ssh(queries):
     sql_hostname, sql_username, sql_password, sql_main_database, sql_port = get_mysql_config()
     db = pymysql.connect(host=sql_hostname,
                          user=sql_username,
