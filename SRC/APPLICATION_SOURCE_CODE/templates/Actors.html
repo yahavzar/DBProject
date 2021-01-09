@@ -82,7 +82,7 @@
         <h1 class="u-heading-font u-text u-title u-text-1">Recommended Actors</h1>
         <div class="u-clearfix u-custom-html u-custom-html-1">
           <style></style>
-          <p>Enter Genre Name:</p>
+          <p>Enter Genre Name to get a recommended actor's in this genre:</p>
             <form action ="" method = "POST">
                 <select name="dropdown">
                     {% for genre in genres %}
@@ -117,6 +117,7 @@
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
             <p></p>
           <style></style>
+            <p>Enter a date range to get known actors during this period : </p>
                 <form action ="" method = "POST">
                     <input type="text" id="startDate1"  name="startDate1">
                     <script>
@@ -155,6 +156,7 @@
         <h1 class="u-heading-font u-text u-title u-text-1">Successful Actors</h1>
           <div>
                   <style></style>
+                          <p>Enter a date range to get successful actors during this period : </p>
                 <form action ="" method = "POST">
                     <input type="text" id="startDate2"  name="startDate2">
                     <script>
@@ -189,13 +191,14 @@
     </section>
     <section class="u-clearfix u-section-4" id="sec-2416">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <h1 class="u-heading-font u-text u-title u-text-1">Movies by Actors</h1>
+        <h1 class="u-heading-font u-text u-title u-text-1">Media by Actors</h1>
         <div class="u-clearfix u-custom-html u-custom-html-1">
           <style></style>
-          <p>Enter Actor's Name:</p>
+
         </div>
         <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-2">
           <style></style>
+            <p>Enter Actor Name and get a list of movies and TV-Shows that the actor has participated in ,order by there popularity</p>
             <form action ="" method = "POST">
                 <input type=”text” name=actorName required value={{request.form.actorName | safe}}>
                 <button type=”submit” name="actors"> Submit </button>

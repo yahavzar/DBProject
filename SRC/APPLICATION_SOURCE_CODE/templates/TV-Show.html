@@ -80,6 +80,10 @@
               <div class="u-container-style u-expand-resize u-layout-cell u-left-cell u-size-26 u-layout-cell-1">
                 <div class="u-container-layout u-container-layout-1">
                   <div >
+                        <p>&zwnj;
+ </p>
+                                            <p>&zwnj;
+ </p>
                                                                 <img src = "https://image.tmdb.org/t/p/w500/{{ resimage |safe }}"  width="400" height="400">
 
                   </div>
@@ -90,14 +94,18 @@
               </div>
               <div class="u-align-left u-container-style u-layout-cell u-right-cell u-size-34 u-layout-cell-2">
                 <div class="u-container-layout u-container-layout-2">
+                                          <p>&zwnj;
+ </p>
                   <div class="u-border-9 u-border-black u-line u-line-horizontal u-line-1"></div>
                   <h2 class="u-text u-text-1">{{ resultTitle | safe}}</h2>
                   <p class="u-text u-text-2">{{ resultOverview | safe}}</p>
                      <p><b>Length</b> : {{ length |safe }}</p>
                     <p> <b>Seasons :</b>{{ seasons |safe }}</p>
                     <p>{{ webSite| safe }}</p>
+                    <p>{{ showlang|safe }}</p>
+
                     <p><b>Vote Average</b> : {{ vote | safe }}  <img src="../static/star-icon.png"  width="16" height="16"> </p>
-                  <div class="u-border-9 u-border-black u-line u-line-horizontal u-line-2"></div>
+                  <div class="u-border-9 u-border-black u-line u-line-horizontal u-line-1"></div>
                 </div>
               </div>
             </div>
@@ -108,6 +116,7 @@
     <section class="u-clearfix u-section-2" id="sec-2a6e">
       <div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-text u-text-1">Cast&nbsp; and Producer</p>
+
             <p>{{ producer|safe }}</p>
                     <p>{{ credit|safe }}</p>
       </div>

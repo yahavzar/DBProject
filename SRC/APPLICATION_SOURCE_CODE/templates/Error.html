@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html style="font-size: 16px;">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Movies, TV Shows">
+    <meta name="keywords" content="Travel in Luxury and Style, Best Car, Service, Safe. Relaxing. Good to ride in., Our Technologies, History Of Red Oval, R8 Coupe Trims, Bask in the limelight, contact form">
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
-    <title>Foreign Languages</title>
+    <title>Movie</title>
     <link rel="stylesheet" href="../static/project/nicepage.css" media="screen">
-<link rel="stylesheet" href="../static/project/Foreign-Languages.css" media="screen">
+<link rel="stylesheet" href="../static/project/Movie.css" media="screen">
     <script class="u-script" type="text/javascript" src="../static/project/jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="../static/project/nicepage.js" defer=""></script>
-          <link href="../static/tabulator-master/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="../static/tabulator-master/dist/js/tabulator.min.js"></script>
     <meta name="generator" content="Nicepage 3.3.3, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
+    <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i">
+
 
 
 
@@ -24,13 +24,13 @@
 		"name": "Database Project",
 		"url": "index.html"
 }</script>
-    <meta property="og:title" content="Foreign Languages">
+    <meta property="og:title" content="Movie">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#40bcdf">
     <link rel="canonical" href="../static/project/index.html">
     <meta property="og:url" content="index.html">
   </head>
-  <body class="u-body"><header class="u-align-center-xs u-border-1 u-border-grey-25 u-clearfix u-gradient u-header u-header" id="sec-bc4c"><div class="u-clearfix u-sheet u-sheet-1">
+  <body class="u-body u-overlap"><header class="u-align-center-xs u-border-1 u-border-grey-25 u-clearfix u-gradient u-header u-header" id="sec-bc4c"><div class="u-clearfix u-sheet u-sheet-1">
         <form action="/search" class="u-border-1 u-border-white u-expanded-width-xs u-input-round u-radius-25 u-search u-search-right u-search-1">
           <button class="u-search-button" type="submit">
             <span class="u-icon-circle u-search-icon u-spacing-10 u-white u-search-icon-1">
@@ -72,78 +72,28 @@
           </div>
         </nav>
       </div></header>
-    <section class="u-clearfix u-section-1" id="sec-16c9">
+    <section class="u-clearfix u-section-1" id="carousel_e555">
       <div class="u-clearfix u-sheet u-sheet-1">
-                  <p style="color:#17a2b8;font-size:19px;">Select Language and we will show you movies and TV shows in this language</p>
-           <form action ="" method = "POST">
-                <select name="dropdown">
-                    {% for language in languages %}
-                    <option value= "{{language}}" SELECTED>{{language}}</option>"
-                    {% endfor %}
-                </select>
-                <input type = "submit" value = "Show Movies"/>
-            </form>
-        <h1 class="u-heading-font u-subtitle u-text u-text-default u-text-1">Movies</h1>
-        <div class="u-clearfix u-custom-html u-custom-html-1">
-          <style></style>
+        <div class="u-clearfix u-expanded-width u-gutter-30 u-layout-wrap u-layout-wrap-1">
+          <div class="u-layout">
+            <div class="u-layout-row">
+              <div class="u-container-style u-expand-resize u-layout-cell u-left-cell u-size-26 u-layout-cell-1">
+                <div class="u-container-layout u-container-layout-1">
+                  <div >
+                                                                  <p>&zwnj;
+ </p>
+                                            <p>&zwnj;
+ </p>
+<body>
+<center>
+                      <b style="color: #0E566C; font-size:xx-large;text-align: center">Oops..</b>
+                      <p style="color: #0E566C; font-size:x-large;text-align: center">we can't found your search..</p>
+                             <a href="/">
+                      <p style="color: #0E566C; font-size:x-large;text-align: center">Go back</p>
+                             </a>
+                                          <img src="../static/404.png">
 
-                    <div id="movie"></div>
-                    <script>
-                        table= new Tabulator("#movie", {
-                        layout:"fitColumns",
-                        height: "311px",
-                        placeholder:"No Data Set",
-                            columns: [
-                                {title: "Movie's title",field:"title"},
-                                {title: "Popularity",field: "popularity"}],
-                        });
-                        var rows = {{ resMovie |safe }}
-                            table.setData(rows);
-                    </script>
-        </div>
-          <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-2">
-          <style></style>
+</center>
+</body>
 
-          </div>
-      </div>
-    </section>
-    <section class="u-clearfix u-section-2" id="sec-8540">
-      <div class="u-clearfix u-sheet u-sheet-1">
-        <h2 class="u-heading-font u-subtitle u-text u-text-default u-text-1">TV Shows</h2>
-        <div class="u-clearfix u-custom-html u-expanded-width u-custom-html-1">
-        <style></style>
-            <form action ="" method = "POST"></form>
-                <div id="show"></div>
-                <script>
-                    table= new Tabulator("#show", {
-                    layout:"fitColumns",
-                    height: "311px",
-                    placeholder:"No Data Set",
-                        columns: [
-                            {title: "Show's title",field:"title"},
-                                {title: "Popularity",field: "popularity"}],
-                    });
-                    var rows = {{ resShow |safe }}
-                        table.setData(rows);
-                </script>
-        </div>
-      </div>
-    </section>
-    
-    
-    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-1b5c"><div class="u-clearfix u-sheet u-sheet-1">
-        <p class="u-small-text u-text u-text-variant u-text-1">Database Project - Yahav Noa Adi Or</p>
-      </div></footer>
-    <section class="u-backlink u-clearfix u-grey-80">
-      <a class="u-link" href="https://nicepage.com/templates" target="_blank">
-        <span>Templates</span>
-      </a>
-      <p class="u-text">
-        <span>created with</span>
-      </p>
-      <a class="u-link" href="https://nicepage.com/html-website-builder" target="_blank">
-        <span>Free WYSIWYG HTML Editor</span>
-      </a>. 
-    </section>
-  </body>
 </html>

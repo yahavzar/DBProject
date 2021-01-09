@@ -18,27 +18,21 @@ def index():
         try:
             movieTitle = request.form['movieTitle']
             if movieTitle != None:
-                print("Movie Title = ", movieTitle)
                 showApiId = search_similar_show(movieTitle)
                 if showApiId == 0:
-                    return redirect("/")
+                    return render_template("Error.html")
+
                 route = "/tvshow/" + str(showApiId)
-                print("route =",route)
                 return redirect(route, code=302)
         except:
             showTitle = request.form['showTitle']
             if showTitle != None:
-                print("Show Title = ", showTitle)
                 movieApiId = search_similar_movie(showTitle)
                 if movieApiId == 0:
-                    return redirect("/")
+                    return render_template("Error.html")
                 route = "/movie/" + str(movieApiId)
-                print("route =", route)
                 return redirect(route, code=302)
 
-        # else:
-        #     showTitle = request.form['showTitle']
-        #     print("Show Title = ", showTitle)
 
 
     sqlQuery = "select  m.apiId , pm.image from Movie m, ( select avg(voteCount) as " \
@@ -91,7 +85,6 @@ def search_similar_show(title):
     movieApiId = get_movie_apiId(title)
     if movieApiId == None:
         return 0
-    print("movieApiId = ", movieApiId)
     sqlQuery = " select distinct countActors.title" \
                " from (SELECT m2.apiId as id, m2.title as title, count(*) as sharedActors from" \
                " Movie as m, Shows as m2, Actors as a, ActorsMovie as am, ActorsShow as am2" \
@@ -104,25 +97,19 @@ def search_similar_show(title):
                " countGenres, Shows m1 where countActors.sharedActors >= 1 and countGenres.sharedGenres >= 1" \
                " and m1.apiId=countActors.id and m1.apiId=countGenres.id"
     res = select(sqlQuery, [movieApiId, movieApiId])
-    print(res)
-    print(res['rows'][0][0])
     tvTitle = res['rows'][0][0]
     # Search for similar show id
     showApiId = get_show_apiId(tvTitle)
-    print("showApiId = ", showApiId)
     if showApiId == None:
-        print("WASDASDASD")
         return 0
     return showApiId
 
 
 def search_similar_movie(title):
     # Get Show title id
-    print("seach movieee")
     showApiId = get_show_apiId(title)
     if showApiId == None:
         return 0
-    print("movieApiId = ", showApiId)
 
     sqlQuery = "select distinct countActors.title from (SELECT m2.apiId as id, m2.title as title, " \
                "count(*) as sharedActors from  Shows as m, Movie as m2, Actors as a," \
@@ -135,14 +122,10 @@ def search_similar_movie(title):
                "where countActors.sharedActors >= 1 and countGenres.sharedGenres >=1 and m1.apiId=countActors.id and m1.apiId=countGenres.id"
 
     res = select(sqlQuery, [showApiId, showApiId])
-    print(res)
-    print(res['rows'][0][0])
     movieTitle = res['rows'][0][0]
     # Search for similar show id
     movieApiId = get_movie_apiId(movieTitle)
-    print("movieApiId = ", movieApiId)
     if movieApiId == None:
-        print("WASDASDASD")
         return 0
     return movieApiId
 
@@ -157,7 +140,6 @@ def get_movie_apiId(title):
         return None
 
 def get_show_apiId(title):
-    print("in func title = ", title)
     try:
         sqlQuery = " select s.apiId" \
                    " from Shows s where s.title = %s"
@@ -236,6 +218,19 @@ def TV_Show(apiId):
                     first = False
             if credit != None:
                 credit = "<b>Cast :</b> " + credit;
+            sqlQuery = "select l.LangName from LanguageShow lm ,Language l where lm.showId=%s and l.languageId=lm.languageId"
+            LanguagesShow = select(sqlQuery, apiId)
+            result = [{LanguagesShow['headers'][0]: row[0]} for row in LanguagesShow['rows']]
+            first = True;
+            showlang=""
+            for lang in result:
+                if first == False:
+                    showlang = showlang + "," + lang['LangName']
+                if first == True:
+                    showlang = lang['LangName']
+                    first = False
+            if showlang != None:
+                showlang = "<b>Spoken Language :</b> " + showlang;
         except sql_executor.NoResultsException:
                 credit = ""
         imagerc1 = ""
@@ -243,7 +238,7 @@ def TV_Show(apiId):
         imagers1 = ""
         links1 = ""
     except sql_executor.NoResultsException:
-        abort(404)
+        render_template("Error.html")
     try:
         sqlQuery ="select distinct commonShow.id ,pm.image from (SELECT m2.apiId as  id,m2.title as title,  " \
                   "count(*) as count FROM Shows as m, Shows as m2, Actors as a, ActorsShow as am, ActorsShow " \
@@ -284,10 +279,10 @@ def TV_Show(apiId):
             imagers1 = "https://image.tmdb.org/t/p/w500/" + imagers1
 
         return render_template('TV-Show.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,length=length,webSite=webSite,vote=vote,seasons=seasons,producer=producer,credit=credit
-                               ,imagers1=imagers1,links1=links1,imagerc1=imagerc1,linkc1=linkc1)
+                               ,imagers1=imagers1,links1=links1,imagerc1=imagerc1,linkc1=linkc1,showlang=showlang)
 
     except sql_executor.NoResultsException:
-        return render_template('TV-Show.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,length=length,webSite=webSite,vote=vote,seasons=seasons,producer=producer,credit=credit)
+        return render_template('TV-Show.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,length=length,webSite=webSite,vote=vote,seasons=seasons,producer=producer,credit=credit,showlang=showlang)
 
 @app.route('/movie/<apiId>')
 def movie(apiId):
@@ -345,8 +340,23 @@ def movie(apiId):
         linkc1 = ""
         imagers1 = ""
         links1 = ""
+        movielang=""
+        sqlQuery="select l.LangName from LanguageMovie lm ,Language l where lm.movieId=%s and l.languageId=lm.languageId"
+        LanguagesMovie= select(sqlQuery,apiId)
+        result = [{LanguagesMovie['headers'][0]: row[0]} for row in LanguagesMovie['rows']]
+        first=True;
+        for lang in result:
+            if first == False:
+                movielang = movielang + "," + lang['LangName']
+            if first == True:
+                movielang =  lang['LangName']
+                first = False
+        if movielang != None:
+            movielang = "<b>Spoken Language :</b> " + movielang;
+
+
     except sql_executor.NoResultsException:
-        abort(404)
+        render_template("Error.html")
     try :
         sqlQuery = "select distinct commonMovie.id ,pm.image from (SELECT m2.apiId as" \
                    " id,m2.title as title,  count(*) as count FROM Movie as m, Movie as " \
@@ -389,9 +399,9 @@ def movie(apiId):
         else :
             imagers1= "https://image.tmdb.org/t/p/w500/" +imagers1
         return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,resultimdb=resultimdb,length=length,collection=collection,webSite=webSite,vote=vote,director=director,credit=credit,
-                               imagers1=imagers1,links1=links1,imagerc1=imagerc1,linkc1=linkc1)
+                               imagers1=imagers1,links1=links1,imagerc1=imagerc1,linkc1=linkc1,movielang=movielang)
     except sql_executor.NoResultsException:
-        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,resultimdb=resultimdb,length=length,collection=collection,webSite=webSite,vote=vote,director=director,credit=credit)
+        return render_template('Movie.html',resultTitle=resultTitle,resultOverview=resultOverview,resimage=resultimage,resultimdb=resultimdb,length=length,collection=collection,webSite=webSite,vote=vote,director=director,credit=credit,movielang=movielang)
 
 
 @app.route('/search')
@@ -412,9 +422,7 @@ def search_return_html():
             apiId = resultapi[0]['apiId']
             return redirect("tvshow/" + str(apiId))
         except sql_executor.NoResultsException:
-            abort(404)
-
-
+            render_template("Error.html")
 
 
 @app.route('/Credits')
@@ -615,14 +623,6 @@ def search_foreign_languages():
         except sql_executor.NoResultsException:
             return render_template('Foreign-Languages.html', languages=languages)
 
-
-@app.route('/testmoce')
-def movie_to_html():
-    sqlQuery = "select apiId,title from Movie   "
-    res = select(sqlQuery)
-    result = [{res['headers'][0]: row[0],
-                 res['headers'][1]: row[1]} for row in res['rows']]
-    return render_template('testmoce.html', res=json.dumps(result))
 
 
 
