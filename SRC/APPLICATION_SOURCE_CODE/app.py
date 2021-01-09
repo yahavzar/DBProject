@@ -3,6 +3,7 @@ import json
 import pymysql
 from flask import Flask, render_template, request, abort, redirect
 import cgi
+from random import shuffle
 
 from SRC.APPLICATION_SOURCE_CODE.DB import sql_executor
 from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import *
@@ -41,10 +42,11 @@ def index():
                ",( select avg(revenue) as avg from Movie) as avgrevenue , PosterMovie pm where " \
                "m.voteCount>=avgVoteCount.avg and m.voteAvg>=avgVoteavg.avg and m.popularity>=avgPopularity.avg " \
                "and m.releaseDay between '2020-01-01' and '2021-01-01' and m.revenue>= avgrevenue.avg " \
-               "and pm.apiId=m.apiId and pm.image is not null limit 5"
+               "and pm.apiId=m.apiId and pm.image is not null "
     res = select(sqlQuery)
     result = [{res['headers'][0]: row[0],
                  res['headers'][1]: row[1]} for row in res['rows']]
+    shuffle(result)
     image0 = result[0]['image']
     image1 = result[1]['image']
     image2 = result[2]['image']
@@ -63,10 +65,11 @@ def index():
              "avgPopularity   , PosterShow pm where m.voteCount>=avgVoteCount.avg" \
              " and m.voteAvg>=avgVoteavg.avg and m.popularity>=avgPopularity.avg           " \
              "      and m.releaseDay between '2020-01-01' and '2021-01-01' and   pm.apiId=m.apiId " \
-             "and pm.image is not null limit 5"
+             "and pm.image is not null"
     resShow = select(sqlQuery)
     result = [{resShow['headers'][0]: row[0],
                resShow['headers'][1]: row[1]} for row in resShow['rows']]
+    shuffle(result)
     imageShow0 = result[0]['image']
     imageShow1 = result[1]['image']
     imageShow2 = result[2]['image']
@@ -248,10 +251,11 @@ def TV_Show(apiId):
                   " Shows as m2, Genre as g  , ShowGenre as mg, ShowGenre as mg2 WHERE m.apiId=%s AND mg.apiId<>mg2.apiId AND " \
                   " mg.apiId=m.apiId AND mg.genreId=g.genreId AND mg2.apiId=m2.apiId AND  mg.genreId=mg2.genreId  GROUP BY " \
                   "m2.apiId,m2.title) as commonGenre , Shows  m1,PosterShow pm where commonShow.count >=1 and commonGenre.count>=1 " \
-                  " and m1.apiId=commonShow.id and m1.apiId=commonGenre.id and commonShow.id= pm.apiId limit 2   "
+                  " and m1.apiId=commonShow.id and m1.apiId=commonGenre.id and commonShow.id= pm.apiId    "
         similarShow = select(sqlQuery, [apiId, apiId])
         resultS = [{similarShow['headers'][0]: row[0],
                     similarShow['headers'][1]: row[1]} for row in similarShow['rows']]
+        shuffle(resultS)
         imagers1 = resultS[0]['image']
         links1 = resultS[0]['id']
     except sql_executor.NoResultsException:
@@ -265,6 +269,8 @@ def TV_Show(apiId):
         commptiveShow = select(sqlQuery, apiId)
         resultM = [{commptiveShow['headers'][0]: row[0],
                     commptiveShow['headers'][1]: row[1]} for row in commptiveShow['rows']]
+        shuffle(resultM)
+
         imagerc1 = resultM[0]['image']
         linkc1 = resultM[0]['apiId']
         if imagerc1 == "":
@@ -369,10 +375,11 @@ def movie(apiId):
                    " AND  mg.apiId=m.apiId AND mg.genreId=g.genreId AND mg2.apiId=m2.apiId AND" \
                    " mg.genreId=mg2.genreId  GROUP BY m2.apiId,m2.title) as commonGenre , Movie" \
                    " m1,PosterMovie pm where commonMovie.count >3 and commonGenre.count>2    " \
-                   "and m1.apiId=commonMovie.id and m1.apiId=commonGenre.id and commonMovie.id= pm.apiId limit 2   "
+                   "and m1.apiId=commonMovie.id and m1.apiId=commonGenre.id and commonMovie.id= pm.apiId   "
         similarMovie = select(sqlQuery,[ apiId,apiId])
         resultS = [{similarMovie['headers'][0]: row[0],
                    similarMovie['headers'][1]: row[1]} for row in similarMovie['rows']]
+        shuffle(resultS)
         imagers1 = resultS[0]['image']
         links1 = resultS[0]['id']
     except sql_executor.NoResultsException:
@@ -381,11 +388,11 @@ def movie(apiId):
         sqlQuery = "select distinct m2.apiId ,pm.image from Movie m1,MoviesGenre mg1 , Movie m2, " \
                    "MoviesGenre     mg2 , PosterMovie pm where  m1.apiId=mg1.apiId and m2.releaseDay " \
                    "between m1.releaseDay - interval 6 month and m1.releaseDay  and m2.apiId=mg2.apiId " \
-                   "and mg1.genreId=mg2.genreId and m2.langId= m1.langId and m1.apiId=%s and m1.apiId <>m2.apiId and pm.apiId=m2.apiId limit 2"
+                   "and mg1.genreId=mg2.genreId and m2.langId= m1.langId and m1.apiId=%s and m1.apiId <>m2.apiId and pm.apiId=m2.apiId "
         commptiveMovie = select(sqlQuery, apiId)
         resultM = [{commptiveMovie['headers'][0]: row[0],
                    commptiveMovie['headers'][1]: row[1]} for row in commptiveMovie['rows']]
-
+        shuffle(resultM)
         imagerc1 = resultM[0]['image']
         linkc1 = resultM[0]['apiId']
         if imagerc1=="":
