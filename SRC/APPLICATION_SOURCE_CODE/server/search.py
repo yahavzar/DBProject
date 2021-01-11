@@ -31,14 +31,14 @@ def search_full_text():
                 return render_template('Search-Movies-or-TV-Shows.html',genres=result)
        elif (request.form.get("dropdown")):
            genere = request.form['dropdown']
-           sqlQuery="SELECT Movie.title, Movie.popularity FROM Movie, Genre, MoviesGenre WHERE " \
+           sqlQuery="SELECT Movie.title, Movie.popularity, 'Movie' as Media FROM Movie, Genre, MoviesGenre WHERE " \
                     "Movie.apiId=MoviesGenre.apiId and MoviesGenre.genreId=Genre.genreId and " \
-                    "Genre.genreName=%s union SELECT Shows.title, Shows.popularity FROM Shows" \
+                    "Genre.genreName=%s union SELECT Shows.title, Shows.popularity, 'TvShow' as Media FROM Shows" \
                     ", Genre, ShowGenre WHERE Shows.apiId=ShowGenre.apiId and ShowGenre.genreId=Genre.genreId" \
                     " and Genre.genreName=%s  order by - popularity"
            try:
                res1 = select(sqlQuery, [genere,genere])
-               result2 = [{res1['headers'][0]: row[0],res1['headers'][1]: row[1]} for row in res1['rows']]
+               result2 = [{res1['headers'][0]: row[0],res1['headers'][1]: row[1],res1['headers'][2]: row[2]} for row in res1['rows']]
                return render_template('Search-Movies-or-TV-Shows.html', res2=json.dumps(result2), genres=resultGenre)
            except sql_executor.NoResultsException:
                return render_template('Search-Movies-or-TV-Shows.html', genres=resultGenre)
