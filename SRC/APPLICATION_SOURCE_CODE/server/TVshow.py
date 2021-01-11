@@ -127,6 +127,8 @@ def getSimilarShow(apiId):
         shuffle(resultS)
         imagers1 = resultS[0]['image']
         links1 = resultS[0]['id']
+        if imagers1 == None:
+            imagers1=""
     except sql_executor.NoResultsException:
         pass
     return imagers1,links1
@@ -138,7 +140,9 @@ def getComputeShow(apiId):
     try :
         sqlQuery = "select distinct m2.apiId ,pm.image from Shows m1,ShowGenre mg1 " \
                    ", Shows m2, ShowGenre  mg2 ,PosterShow pm where  m1.apiId=mg1.apiId" \
-                   " and m2.releaseDay between m1.releaseDay - interval 6 month and m1.releaseDay " \
+                   " and (m2.releaseDay between " \
+                  "m1.releaseDay - interval 6 month and m1.releaseDay or m2.releaseDay between m1.releaseDay" \
+                  "  and m1.releaseDay + interval 6 month  ) " \
                    " and m2.apiId=mg2.apiId and mg1.genreId=mg2.genreId and m2.langId= m1.langId" \
                    " and m1.apiId=%s and m1.apiId <>m2.apiId and pm.apiId=m2.apiId"
         commptiveShow = select(sqlQuery, apiId)
@@ -147,6 +151,8 @@ def getComputeShow(apiId):
         shuffle(resultM)
         imagerc1 = resultM[0]['image']
         linkc1 = resultM[0]['apiId']
+        if imagerc1 == None:
+            imagerc1 = ""
     except sql_executor.NoResultsException:
         pass
     return imagerc1, linkc1
