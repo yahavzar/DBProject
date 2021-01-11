@@ -118,17 +118,10 @@ def getSyccesfulActors(date):
         return []
 
 def getMediaByActor(actor):
-    sqlQuery = "select distinct title from (" \
-               "(select Movie.title as title from Movie, ActorsMovie, Actors " \
-               "where Actors.actorName = %s and ActorsMovie.actorId=Actors.actorId " \
-               "and ActorsMovie.filmId=Movie.apiId order by Movie.popularity)" \
-               "union" \
-               "(select Shows.title as title from Shows, ActorsShow, Actors " \
-               "where Actors.actorName = %s and ActorsShow.actorId=Actors.actorId " \
-               "and ActorsShow.showId=Shows.apiId order by Shows.popularity)) as temp"
+    sqlQuery = "(select distinct Movie.title, 'Movie' as Media from Movie, ActorsMovie, Actors Where Actors.actorName = %s and Movie.apiId = ActorsMovie.filmId and ActorsMovie.actorId = Actors.actorId  order by Movie.popularity) union (select distinct Shows.title, 'Series' as Media from Shows, ActorsShow, Actors Where Actors.actorName = %s and Shows.apiId = ActorsShow.showId and ActorsShow.actorId = Actors.actorId  order by Shows.popularity)"
     try:
         res = select(sqlQuery, [actor, actor])
-        result = [{res['headers'][0]: row[0]} for row in res['rows']]
+        result = [{res['headers'][0]: row[0],res['headers'][1]:row[1]} for row in res['rows']]
         return result
     except sql_executor.NoResultsException:
         return []

@@ -99,9 +99,37 @@
     });
     var rows = {{ res |safe }}
         table.setData(rows);
-            </script>        </div>
+            </script>
+          <p>Enter Genre Name to get a recommended media in this genre:</p>
+            <form action ="" method = "POST">
+                <select name="dropdown">
+                    {% for genre in genres %}
+                    <option value= "{{genre}}" SELECTED>{{genre}}</option>"
+                    {% endfor %}
+                </select>
+                <input type = "submit" value = "Show Media"/>
+            </form>
+
+                        <div id="media"></div>
+                <script>
+
+    table= new Tabulator("#media", {
+    layout:"fitColumns",
+    height: "311px",
+    placeholder:"No Data Set",
+        columns: [
+            {title: "Title",field:"title"},
+            {title:"Popularity" ,field: "popularity"}],
+    });
+    var row2 = {{ res2 |safe }}
+        table.setData(row2);
+            </script>
+        </div>
       </div>
+
+
     </section>
+
     <section class="u-black u-clearfix u-section-2" id="sec-45dc">
       <div class="u-clearfix u-sheet u-sheet-1"></div>
     </section>
