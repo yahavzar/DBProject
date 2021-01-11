@@ -15,125 +15,120 @@ def Actors():
 
 @actors_page.route("/Actors",methods=['POST','GET'])
 def search_recommended_actors():
+    sqlQuery = "select distinct Genre.genreName as title from Genre"
+    res2 = select(sqlQuery)
+    result2 = [k[0] for k in res2["rows"]]
     if request.method == 'POST':
         if request.form.get("dropdown"):
             title = request.form['dropdown']
-            sqlQuery = "select * from " \
-                       "(select a.actorName as title, count(*) as cnt " \
-                       "from Actors a, MoviesGenre mg, Movie m , ActorsMovie am , Genre g , " \
-                       "(select Genre.genreId as id  from Genre  where genreName=%s) AS temp,  " \
-                       "(select g.genreId,g.genreName,avg(voteCount) as avgvotecount  from Movie m , Genre g, MoviesGenre mg  " \
-                       "where m.apiId=mg.apiId and g.genreId=mg.genreId  group by g.genreId ) as GenreAvgVoteCount  " \
-                       "where  m.apiId=mg.apiId and a.actorId=am.actorId and am.filmId=m.apiId and g.genreName=%s " \
-                       "and  temp.id=mg.genreId and  m.voteCount>GenreAvgVoteCount.avgvotecount and m.voteAvg>8 " \
-                       "and temp.id= GenreAvgVoteCount.genreId " \
-                       "group by a.actorId " \
-                       "union " \
-                       "select a.actorName as name, count(*) as cnt " \
-                       "from Actors a, ShowGenre mg, Shows m , ActorsShow am , Genre g , " \
-                       "(select Genre.genreId as id from Genre where genreName=%s) AS temp, " \
-                       "(select g.genreId,g.genreName,avg(voteCount) as avgvotecount from Shows m , Genre g, ShowGenre mg " \
-                       "where m.apiId=mg.apiId and g.genreId=mg.genreId group by g.genreId ) as GenreAvgVoteCount  " \
-                       "where  m.apiId=mg.apiId and a.actorId=am.actorId and am.showId=m.apiId and g.genreName=%s " \
-                       "and  temp.id=mg.genreId and  m.voteCount>GenreAvgVoteCount.avgvotecount and m.voteAvg>8 " \
-                       "and temp.id= GenreAvgVoteCount.genreId  " \
-                       "group by a.actorId) as temp " \
-                       "order by -cnt;"
-            try:
-                res = select(sqlQuery, [title, title, title, title])
-                result = [{res['headers'][0]: row[0]} for row in res['rows']]
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', res=result, genres=result2)
-            except sql_executor.NoResultsException:
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', genres=result2)
+            result = getRecommendedActorsByGenre(title)
+            return render_template('Actors.html', res=result, genres=result2)
         elif request.form.get("startDate1"): # returns actors who participated in at least 3 movies during the time period
             date = request.form['startDate1'].split(" - ")
-            moviesNumber = 3
-            tempStart = date[0].split("/")
-            tempEnd = date[1].split("/")
-            start = tempStart[2]+"-"+tempStart[0]+"-"+tempStart[1]
-            end = tempEnd[2] + "-" + tempEnd[0] + "-" + tempEnd[1]
-
-            sqlQuery = "select title, cnt from (select title,cnt from (select a1.actorName as title, count(*) as cnt, a1.actorId as id from Movie m1 , Actors a1 , ActorsMovie am1 where a1.actorId=am1.actorId and m1.apiId=am1.filmId and m1.releaseDay between %s and %s group by a1.actorId having count(*)>%s) as temp group by temp.id  order by temp.cnt DESC) as temp4 union  (select title,cnt from (select a1.actorName as title, count(*) as cnt, a1.actorId as id from Shows m1 , Actors a1 , ActorsShow am1 where a1.actorId=am1.actorId and m1.apiId=am1.showId and m1.releaseDay between %s and %s group by a1.actorId having count(*)>%s) as temp2 group by temp2.id order by temp2.cnt DESC)"
-            try:
-                res4 = select(sqlQuery, [start, end, moviesNumber,start, end, moviesNumber])
-                result4 = [{res4['headers'][0]: row[0]} for row in res4['rows']]
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', resKnown=result4, genres=result2)
-            except sql_executor.NoResultsException:
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', genres=result2)
+            result4=getKnownActors(date)
+            return render_template('Actors.html', resKnown=result4, genres=result2)
         elif request.form.get("startDate2"):
             # actors who have at least 3 movies between those dates with a popularity above 100 and a revenue-to-budget ratio of at least 6.5
             date = request.form['startDate2'].split(" - ")
-            moviesNumber2 = 3
-            revenueToBudeget = 6.5
-            popularity = 100
-            tempStart = date[0].split("/")
-            tempEnd = date[1].split("/")
-            start = tempStart[2]+"-"+tempStart[0]+"-"+tempStart[1]
-            end = tempEnd[2] + "-" + tempEnd[0] + "-" + tempEnd[1]
-
-            sqlQuery = "select distinct title from" \
-                       "(select title from" \
-                       "( select title, cnt from" \
-                       "(select a1.actorName as title, count(*) as cnt, a1.actorId as id " \
-                       "from Movie m1 , Actors a1 , ActorsMovie am1 " \
-                       "where a1.actorId=am1.actorId and m1.apiId=am1.filmId and m1.releaseDay " \
-                       "between %s and %s and ((m1.budget*%s)<m1.revenue) and (m1.popularity>%s) " \
-                       "group by a1.actorId having count(*)>%s) as temp group by temp.id order by temp.cnt DESC) as temp " \
-                       "union " \
-                       "select title from" \
-                       "( select title, cnt from" \
-                       "(select a1.actorName as title, count(*) as cnt, a1.actorId as id " \
-                       "from Shows m1 , Actors a1 , ActorsShow am1 " \
-                       "where a1.actorId=am1.actorId and m1.apiId=am1.showId and m1.releaseDay " \
-                       "between %s and %s and (m1.popularity>%s) " \
-                       "group by a1.actorId having count(*)>%s) as temp2 " \
-                       "group by temp2.id " \
-                       "order by temp2.cnt DESC) as temp4) as final"
-            try:
-                res3 = select(sqlQuery, [start, end, revenueToBudeget, popularity, moviesNumber2,start, end, popularity, moviesNumber2])
-                result3 = [{res3['headers'][0]: row[0]} for row in res3['rows']]
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', resSuc=result3, genres=result2)
-            except sql_executor.NoResultsException:
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', genres=result2)
+            result3=getSyccesfulActors(date)
+            return render_template('Actors.html', resSuc=result3, genres=result2)
         elif request.form.get('actorName'):
             actor = request.form['actorName']
-            sqlQuery = "select distinct title from (" \
-                       "(select Movie.title as title from Movie, ActorsMovie, Actors " \
-                       "where Actors.actorName = %s and ActorsMovie.actorId=Actors.actorId " \
-                       "and ActorsMovie.filmId=Movie.apiId order by Movie.popularity)" \
-                       "union" \
-                       "(select Shows.title as title from Shows, ActorsShow, Actors " \
-                       "where Actors.actorName = %s and ActorsShow.actorId=Actors.actorId " \
-                       "and ActorsShow.showId=Shows.apiId order by Shows.popularity)) as temp"
-            try:
-                res = select(sqlQuery, [actor, actor])
-                result = [{res['headers'][0]: row[0]} for row in res['rows']]
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', resNames=result, genres=result2)
-            except sql_executor.NoResultsException:
-                sqlQuery = "select distinct Genre.genreName as title from Genre"
-                res2 = select(sqlQuery)
-                result2 = [k[0] for k in res2["rows"]]
-                return render_template('Actors.html', genres=result2)
+            result=getMediaByActor(actor)
+            return render_template('Actors.html', resNames=result, genres=result2)
 
 
+def getRecommendedActorsByGenre(title):
+    try:
+        sqlQuery = "select * from " \
+               "(select a.actorName as title, count(*) as cnt " \
+               "from Actors a, MoviesGenre mg, Movie m , ActorsMovie am , Genre g , " \
+               "(select Genre.genreId as id  from Genre  where genreName=%s) AS temp,  " \
+               "(select g.genreId,g.genreName,avg(voteCount) as avgvotecount  from Movie m , Genre g, MoviesGenre mg  " \
+               "where m.apiId=mg.apiId and g.genreId=mg.genreId  group by g.genreId ) as GenreAvgVoteCount  " \
+               "where  m.apiId=mg.apiId and a.actorId=am.actorId and am.filmId=m.apiId and g.genreName=%s " \
+               "and  temp.id=mg.genreId and  m.voteCount>GenreAvgVoteCount.avgvotecount and m.voteAvg>8 " \
+               "and temp.id= GenreAvgVoteCount.genreId " \
+               "group by a.actorId " \
+               "union " \
+               "select a.actorName as name, count(*) as cnt " \
+               "from Actors a, ShowGenre mg, Shows m , ActorsShow am , Genre g , " \
+               "(select Genre.genreId as id from Genre where genreName=%s) AS temp, " \
+               "(select g.genreId,g.genreName,avg(voteCount) as avgvotecount from Shows m , Genre g, ShowGenre mg " \
+               "where m.apiId=mg.apiId and g.genreId=mg.genreId group by g.genreId ) as GenreAvgVoteCount  " \
+               "where  m.apiId=mg.apiId and a.actorId=am.actorId and am.showId=m.apiId and g.genreName=%s " \
+               "and  temp.id=mg.genreId and  m.voteCount>GenreAvgVoteCount.avgvotecount and m.voteAvg>8 " \
+               "and temp.id= GenreAvgVoteCount.genreId  " \
+               "group by a.actorId) as temp " \
+               "order by -cnt;"
+        res = select(sqlQuery, [title, title, title, title])
+        result = [{res['headers'][0]: row[0]} for row in res['rows']]
+        return result
+    except sql_executor.NoResultsException:
+        return []
+
+def getKnownActors(date):
+    moviesNumber = 3
+    tempStart = date[0].split("/")
+    tempEnd = date[1].split("/")
+    start = tempStart[2] + "-" + tempStart[0] + "-" + tempStart[1]
+    end = tempEnd[2] + "-" + tempEnd[0] + "-" + tempEnd[1]
+
+    sqlQuery = "select title, cnt from (select title,cnt from (select a1.actorName as title, count(*) as cnt, a1.actorId as id from Movie m1 , Actors a1 , ActorsMovie am1 where a1.actorId=am1.actorId and m1.apiId=am1.filmId and m1.releaseDay between %s and %s group by a1.actorId having count(*)>%s) as temp group by temp.id  order by temp.cnt DESC) as temp4 union  (select title,cnt from (select a1.actorName as title, count(*) as cnt, a1.actorId as id from Shows m1 , Actors a1 , ActorsShow am1 where a1.actorId=am1.actorId and m1.apiId=am1.showId and m1.releaseDay between %s and %s group by a1.actorId having count(*)>%s) as temp2 group by temp2.id order by temp2.cnt DESC)"
+    try:
+        res4 = select(sqlQuery, [start, end, moviesNumber, start, end, moviesNumber])
+        result4 = [{res4['headers'][0]: row[0]} for row in res4['rows']]
+        return result4
+    except sql_executor.NoResultsException:
+        return []
+
+def getSyccesfulActors(date):
+    moviesNumber2 = 3
+    revenueToBudeget = 6.5
+    popularity = 100
+    tempStart = date[0].split("/")
+    tempEnd = date[1].split("/")
+    start = tempStart[2] + "-" + tempStart[0] + "-" + tempStart[1]
+    end = tempEnd[2] + "-" + tempEnd[0] + "-" + tempEnd[1]
+
+    sqlQuery = "select distinct title from" \
+               "(select title from" \
+               "( select title, cnt from" \
+               "(select a1.actorName as title, count(*) as cnt, a1.actorId as id " \
+               "from Movie m1 , Actors a1 , ActorsMovie am1 " \
+               "where a1.actorId=am1.actorId and m1.apiId=am1.filmId and m1.releaseDay " \
+               "between %s and %s and ((m1.budget*%s)<m1.revenue) and (m1.popularity>%s) " \
+               "group by a1.actorId having count(*)>%s) as temp group by temp.id order by temp.cnt DESC) as temp " \
+               "union " \
+               "select title from" \
+               "( select title, cnt from" \
+               "(select a1.actorName as title, count(*) as cnt, a1.actorId as id " \
+               "from Shows m1 , Actors a1 , ActorsShow am1 " \
+               "where a1.actorId=am1.actorId and m1.apiId=am1.showId and m1.releaseDay " \
+               "between %s and %s and (m1.popularity>%s) " \
+               "group by a1.actorId having count(*)>%s) as temp2 " \
+               "group by temp2.id " \
+               "order by temp2.cnt DESC) as temp4) as final"
+    try:
+        res3 = select(sqlQuery,
+                      [start, end, revenueToBudeget, popularity, moviesNumber2, start, end, popularity, moviesNumber2])
+        result3 = [{res3['headers'][0]: row[0]} for row in res3['rows']]
+        return result3
+    except sql_executor.NoResultsException:
+        return []
+
+def getMediaByActor(actor):
+    sqlQuery = "select distinct title from (" \
+               "(select Movie.title as title from Movie, ActorsMovie, Actors " \
+               "where Actors.actorName = %s and ActorsMovie.actorId=Actors.actorId " \
+               "and ActorsMovie.filmId=Movie.apiId order by Movie.popularity)" \
+               "union" \
+               "(select Shows.title as title from Shows, ActorsShow, Actors " \
+               "where Actors.actorName = %s and ActorsShow.actorId=Actors.actorId " \
+               "and ActorsShow.showId=Shows.apiId order by Shows.popularity)) as temp"
+    try:
+        res = select(sqlQuery, [actor, actor])
+        result = [{res['headers'][0]: row[0]} for row in res['rows']]
+        return result
+    except sql_executor.NoResultsException:
+        return []
