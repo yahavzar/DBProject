@@ -134,7 +134,7 @@ def getSimilarMovie(apiId):
         if imagers1 == None:
             imagers1 = ""
     except sql_executor.NoResultsException:
-        pass
+        return imagers1, links1
     return imagers1,links1
 
 def getComputeMovie(apiId):
@@ -145,7 +145,7 @@ def getComputeMovie(apiId):
                   "     mg2 , PosterMovie pm where  m1.apiId=mg1.apiId and (m2.releaseDay between " \
                   "m1.releaseDay - interval 6 month and m1.releaseDay or m2.releaseDay between m1.releaseDay" \
                   "  and m1.releaseDay + interval 6 month  )and m2.apiId=mg2.apiId and mg1.genreId=mg2.genreId" \
-                  " and m2.langId= m1.langId and m1.apiId=2 and m1.apiId <>m2.apiId and pm.apiId=m2.apiId "
+                  " and m2.langId= m1.langId and m1.apiId=%s and m1.apiId <>m2.apiId and pm.apiId=m2.apiId "
         commptiveMovie = select(sqlQuery, apiId)
         resultM = [{commptiveMovie['headers'][0]: row[0],
                     commptiveMovie['headers'][1]: row[1]} for row in commptiveMovie['rows']]
@@ -155,7 +155,7 @@ def getComputeMovie(apiId):
         if imagerc1 == None:
             imagerc1 = ""
     except sql_executor.NoResultsException:
-        pass
+        return imagerc1, linkc1
     return imagerc1, linkc1
 
 def getBasicInfo(apiId):
