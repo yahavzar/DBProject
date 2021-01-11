@@ -10,7 +10,6 @@ from SRC.APPLICATION_SOURCE_CODE.server.movie import movie_page
 
 app = Flask(__name__)
 
-
 app.register_blueprint(actors_page)
 app.register_blueprint(tv_page)
 app.register_blueprint(lang_page)

@@ -20,16 +20,17 @@ def index():
 
                 route = "/tvshow/" + str(showApiId)
                 return redirect(route, code=302)
-        except:
-            showTitle = request.form['showTitle']
-            if showTitle != None:
-                movieApiId = search_similar_movie(showTitle)
-                if movieApiId == 0:
-                    return render_template("Error.html")
-                route = "/movie/" + str(movieApiId)
+        except :
+            try:
+                showTitle = request.form['showTitle']
+                if showTitle != None:
+                    movieApiId = search_similar_movie(showTitle)
+                    if movieApiId == 0:
+                        return render_template("Error.html")
+                    route = "/movie/" + str(movieApiId)
                 return redirect(route, code=302)
-
-
+            except :
+                return render_template("Error.html")
 
     sqlQuery = "select  m.apiId , pm.image from Movie m, ( select avg(voteCount) as " \
                "avg from Movie) as avgVoteCount , ( select avg(voteAvg) as avg from Movie)" \
