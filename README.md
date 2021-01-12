@@ -23,19 +23,19 @@ Deployment instructions:
    source specific/scratch/<userName>/django/DBProject/bin/activate.csh
 
 8) ```sh 
- setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib
+   setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib
 
 9) ```sh 
    setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib:$LD_LIBRARY_PATH
 
 10) ```sh 
-pip install --target='/specific/scratch/<userName>/python_package' -r requirements.txt
+    pip install --target='/specific/scratch/<userName>/python_package' -r requirements.txt
 
 11) ```sh 
-setenv PYTHONPATH /specific/scratch/<userName>/python_package
+    setenv PYTHONPATH /specific/scratch/<userName>/python_package
 
 12) ```sh 
     cd SRC/APPLICATION_SOURCE_CODE
 
 13) ```sh 
- python3 app.py
+    python3 app.py
