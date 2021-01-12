@@ -28,10 +28,10 @@ Deployment instructions:
 9) ```sh 
    setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib:$LD_LIBRARY_PATH
 
-10)```sh 
+10) ```sh 
 pip install --target='/specific/scratch/<userName>/python_package' -r requirements.txt
 
-11)```sh 
+11) ```sh 
 setenv PYTHONPATH /specific/scratch/<userName>/python_package
 
 12) ```sh 
