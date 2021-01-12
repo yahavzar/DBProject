@@ -5,7 +5,10 @@ Deployment instructions:
 
 1) Login to nova
 
-2) ssh delta-tomcat-vm
+2)  Go to delta-tomcat-vm
+    ```sh 
+    ssh delta-tomcat-vm
+    ```
 
 3) move to your directory with 
     ```sh 
@@ -19,7 +22,7 @@ Deployment instructions:
     ```    
 5) Make the virtual environment
     ```sh 
-   $virtualenv specific/scratch/<userName>/django/DBProject.
+   $virtualenv specific/scratch/<userName>/django/DBProject
     ```    
 6) Activate the virtual environment
     ```sh 
