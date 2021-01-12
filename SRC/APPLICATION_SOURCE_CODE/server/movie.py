@@ -36,12 +36,12 @@ def movie(apiId):
     imagers1,links1=getSimilarMovie(apiId)
     imagerc1,linkc1= getComputeMovie(apiId)
     if imagerc1=="":
-            imagerc1= "./static/noimage.png"
+            imagerc1= "../static/noimage.png"
             linkc1=apiId
     else :
             imagerc1= "https://image.tmdb.org/t/p/w500/" +imagerc1
     if imagers1=="":
-            imagers1= "./static/noimage.png"
+            imagers1= "../static/noimage.png"
             links1=apiId
     else :
             imagers1= "https://image.tmdb.org/t/p/w500/" +imagers1
