@@ -96,7 +96,9 @@ def search_similar_show(title):
                " countGenres, Shows m1 where countActors.sharedActors >= 1 and countGenres.sharedGenres >= 1" \
                " and m1.apiId=countActors.id and m1.apiId=countGenres.id"
     res = select(sqlQuery, [movieApiId, movieApiId])
-    tvTitle = res['rows'][0][0]
+    result = [{res['headers'][0]: row[0]} for row in res['rows']]
+    shuffle(result)
+    tvTitle = result[0]['title']
     # Search for similar show id
     showApiId = get_show_apiId(tvTitle)
     if showApiId == None:
@@ -121,7 +123,9 @@ def search_similar_movie(title):
                "where countActors.sharedActors >= 1 and countGenres.sharedGenres >=1 and m1.apiId=countActors.id and m1.apiId=countGenres.id"
 
     res = select(sqlQuery, [showApiId, showApiId])
-    movieTitle = res['rows'][0][0]
+    result = [{res['headers'][0]: row[0]} for row in res['rows']]
+    shuffle(result)
+    movieTitle = result[0]['title']
     # Search for similar show id
     movieApiId = get_movie_apiId(movieTitle)
     if movieApiId == None:
