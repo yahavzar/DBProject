@@ -28,7 +28,7 @@ def movie(apiId):
     try:
         resultimage = getPoster(apiId)
     except sql_executor.NoResultsException:
-        resultimage= "./static/noimage.png"
+        resultimage= "../static/noimage.png"
     try :
         movielang = getSpokenLang(apiId)
     except  sql_executor.NoResultsException:
