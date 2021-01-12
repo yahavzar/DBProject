@@ -11,43 +11,32 @@ Deployment instructions:
     ```sh 
    $cd specific/scratch/<userName>/django 
     ```
-4) download DBProject
+4) Download DBProject
     ```sh 
    $git clone https://github.com/yahavzar/DBProject.git (or move DBProject from nova with
-        $scp -r DBProject delta-tomcat-vm:/specific/scratch/<userName>/django/)
-    ```    
-5) 
-    ```sh 
+        $scp -r DBProject delta-tomcat-vm:/specific/scratch/<userName>/django/) 
     $cd DBProjet
     ```    
-6) Make the virtual environment
+5) Make the virtual environment
     ```sh 
    $virtualenv specific/scratch/<userName>/django/DBProject.
     ```    
-7) Activate the virtual environment
+6) Activate the virtual environment
     ```sh 
    $source specific/scratch/<userName>/django/DBProject/bin/activate.csh
+   $setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib
+   $setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib:$LD_LIBRARY_PATH
+    ```    
+7) Install requirements
+    ```sh 
+    $pip install --target='/specific/scratch/<userName>/python_package' -r requirements.txt
+    $setenv PYTHONPATH /specific/scratch/<userName>/python_package
     ```    
 8) 
     ```sh 
-   $setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib
-    ```    
-9) ```sh 
-   $setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib:$LD_LIBRARY_PATH
-    ```    
-10) Install requirements
-    ```sh 
-    $pip install --target='/specific/scratch/<userName>/python_package' -r requirements.txt
-    ```    
-11) 
-    ```sh 
-    $setenv PYTHONPATH /specific/scratch/<userName>/python_package
-    ```    
-12) 
-    ```sh 
     $cd SRC/APPLICATION_SOURCE_CODE
     ```    
-13) Run app.py
+9) Run app.py
     ```sh 
     $python3 app.py
     ```    
