@@ -40,7 +40,7 @@ Deployment instructions:
     ```sh 
     $python3 app.py
     ```    
-Notice:  
+## Notice:  
 If you'll be running the app in a local enviorment and not on nova, you'll neeed to go /APPLICATION_SOURCE_CODE/DB/config/mysql_config.json and the host name to 127.0.0.1 and change the port to 3305. Moreover you will have to add to the import prefix 
 SRC.APPLICATION_SOURCE_CODE.
 This needs to be done for all file within app.py and SRC.APPLICATION_SOURCE_CODE.server
