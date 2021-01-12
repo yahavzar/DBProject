@@ -1,8 +1,8 @@
 
 from flask import request, render_template, Blueprint, redirect
 
-from SRC.APPLICATION_SOURCE_CODE.DB import sql_executor
-from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import *
+from DB import sql_executor
+from DB.sql_executor import *
 
 search_page = Blueprint('search', __name__, template_folder='templates')
 

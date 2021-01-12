@@ -313,6 +313,44 @@ def fetch_showimage():
             print("Exeception occured:{}".format(e))
             InsertQueries.insertPosterShows(connectionObject, show, None)
             continue
+
+
+def fetch_cast():
+    # Fetch cast  for tv-show which was empty from api
+    connectionObject = pymysql.connect(host="127.0.0.1", user="DbMysql03", password="DbMysql03", db="DbMysql03",
+                                       port=3305)
+    cursorObject = connectionObject.cursor()
+    sqlQuery= "SELECT t1.apiId FROM  Shows t1 LEFT JOIN ActorsShow t2 ON t2.showId=t1.apiId WHERE t2.showId IS NULL"
+    cursorObject.execute(sqlQuery)
+    rows = cursorObject.fetchall()
+    tv_list = {}
+    for row in rows:
+        tv_list[row[0]] = row[0]
+    data = {'api_key': 'd005091db9214b502565db95dea43fc7'}
+    sqlQuery = "SELECT * FROM Actors"
+    cursorObject.execute(sqlQuery)
+    rows = cursorObject.fetchall()
+    actors = {}
+    for row in rows:
+        actors[row[0]] = row[1]
+
+    for tv in tv_list:
+        tv_url = f"https://api.themoviedb.org/3/tv/{tv}/credits?api_key=d005091db9214b502565db95dea43fc7"
+        req = requests.get(tv_url, data)
+        try:
+            js = req.json()
+            for a in js["cast"]:
+                if a["known_for_department"] == "Acting":
+                    if a["id"] in actors:
+                        pass
+                    else:
+                        actors[a["id"]] = a["name"]
+                        InsertQueries.insertActors(connectionObject, a["id"], a["name"], a["gender"])
+                    InsertQueries.InsertShowActors(connectionObject, js["id"], a["id"])
+        except Exception as e:
+            print("Exeception occured:{}".format(e))
+            continue
+
 def fetch_Data():
     pass
     #fetch_movie()
