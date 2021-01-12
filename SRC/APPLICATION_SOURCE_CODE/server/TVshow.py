@@ -19,7 +19,7 @@ def TV_Show(apiId):
     try:
         resultimage = getPoster(apiId)
     except sql_executor.NoResultsException:
-        resultimage = "../static/noimage.png"
+        resultimage = "./static/noimage.png"
     try:
         producer = getProducer(apiId)
     except sql_executor.NoResultsException:
@@ -40,7 +40,7 @@ def TV_Show(apiId):
     else:
             imagerc1 = "https://image.tmdb.org/t/p/w500/" + imagerc1
     if imagers1 == "":
-            imagers1 = "../static/noimage.png"
+            imagers1 = "./static/noimage.png"
             links1 = apiId
     else:
         imagers1 = "https://image.tmdb.org/t/p/w500/" + imagers1

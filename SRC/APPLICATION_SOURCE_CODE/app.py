@@ -1,12 +1,12 @@
 from flask import Flask
 
-from server.Actors import actors_page
-from server.Front_page import home_page
-from server.TVshow import tv_page
-from server.Foreign_Languages import lang_page
-from server.credits import credit_page
-from server.search import search_page
-from server.movie import movie_page
+from SRC.APPLICATION_SOURCE_CODE.server.Actors import actors_page
+from SRC.APPLICATION_SOURCE_CODE.server.Front_page import home_page
+from SRC.APPLICATION_SOURCE_CODE.server.TVshow import tv_page
+from SRC.APPLICATION_SOURCE_CODE.server.Foreign_Languages import lang_page
+from SRC.APPLICATION_SOURCE_CODE.server.credits import credit_page
+from SRC.APPLICATION_SOURCE_CODE.server.search import search_page
+from SRC.APPLICATION_SOURCE_CODE.server.movie import movie_page
 
 app = Flask(__name__)
 
