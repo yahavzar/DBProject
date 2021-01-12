@@ -22,7 +22,7 @@ Deployment instructions:
 7) ```sh 
    source specific/scratch/<userName>/django/DBProject/bin/activate.csh
 
-8)```sh 
+8) ```sh 
  setenv LD_LIBRARY_PATH /usr/local/lib/openssl-1.1.1a/lib
 
 9) ```sh 
@@ -37,5 +37,5 @@ setenv PYTHONPATH /specific/scratch/<userName>/python_package
 12) ```sh 
     cd SRC/APPLICATION_SOURCE_CODE
 
-13)```sh 
+13) ```sh 
  python3 app.py
