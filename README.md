@@ -17,7 +17,7 @@ Deployment instructions:
 4) Download DBProject
     ```sh 
    $ git clone https://github.com/yahavzar/DBProject.git (or move DBProject from nova with
-        $scp -r DBProject delta-tomcat-vm:/specific/scratch/<userName>/django/) 
+        $scp -r DBProject delta-tomcat-vm:/specific/scratch/<userName>) 
     $ cd DBProject
     ```    
 5) Make the virtual environment
