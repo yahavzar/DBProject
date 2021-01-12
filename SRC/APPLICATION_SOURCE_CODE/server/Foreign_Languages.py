@@ -1,7 +1,7 @@
 from flask import request, render_template, Blueprint
 
-from DB import sql_executor
-from DB.sql_executor import select
+from SRC.APPLICATION_SOURCE_CODE.DB import sql_executor
+from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import select
 
 lang_page = Blueprint('lang_page', __name__, template_folder='templates')
 

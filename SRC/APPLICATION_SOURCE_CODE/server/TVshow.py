@@ -1,7 +1,7 @@
 from flask import  render_template, Blueprint
 
-from DB import sql_executor
-from DB.sql_executor import select
+from SRC.APPLICATION_SOURCE_CODE.DB import sql_executor
+from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import select
 from random import shuffle
 
 tv_page = Blueprint('tvshow', __name__, template_folder='templates')

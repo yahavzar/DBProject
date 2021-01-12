@@ -2,7 +2,7 @@
 from flask import  render_template, Blueprint
 import json
 
-from DB.sql_executor import select
+from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import select
 
 credit_page = Blueprint('credit', __name__, template_folder='templates')
 

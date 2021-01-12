@@ -1,8 +1,8 @@
 
 from flask import Flask, render_template, request, abort, redirect, Blueprint
 from random import shuffle
-from DB import sql_executor
-from DB.sql_executor import *
+from SRC.APPLICATION_SOURCE_CODE.DB import sql_executor
+from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import *
 
 home_page = Blueprint('home', __name__, template_folder='templates')
 

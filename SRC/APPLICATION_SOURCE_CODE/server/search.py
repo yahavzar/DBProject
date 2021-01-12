@@ -1,8 +1,8 @@
 
 from flask import request, render_template, Blueprint, redirect
 
-from DB import sql_executor
-from DB.sql_executor import *
+from SRC.APPLICATION_SOURCE_CODE.DB import sql_executor
+from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import *
 
 search_page = Blueprint('search', __name__, template_folder='templates')
 
@@ -28,7 +28,7 @@ def search_full_text():
                 result=[{res['headers'][0]: row[0] } for row in res['rows']]
                 return render_template('Search-Movies-or-TV-Shows.html',res=json.dumps(result),genres=resultGenre)
             except sql_executor.NoResultsException:
-                return render_template('Search-Movies-or-TV-Shows.html',genres=result)
+                return render_template('Search-Movies-or-TV-Shows.html',genres=resultGenre)
        elif (request.form.get("dropdown")):
            genere = request.form['dropdown']
            sqlQuery="SELECT Movie.title, Movie.popularity, 'Movie' as Media FROM Movie, Genre, MoviesGenre WHERE " \

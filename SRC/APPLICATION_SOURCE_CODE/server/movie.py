@@ -1,7 +1,7 @@
 from flask import request, render_template, Blueprint
 
-from DB import sql_executor
-from DB.sql_executor import select
+from SRC.APPLICATION_SOURCE_CODE.DB import sql_executor
+from SRC.APPLICATION_SOURCE_CODE.DB.sql_executor import select
 from random import shuffle
 
 movie_page = Blueprint('movie', __name__, template_folder='templates')
@@ -164,7 +164,10 @@ def getBasicInfo(apiId):
     resultTitle = [{resofMovie['headers'][1]: row[1]} for row in resofMovie['rows']]
     resultTitle = resultTitle[0]['title']
     imdb = [{resofMovie['headers'][8]: row[8]} for row in resofMovie['rows']]
-    resultimdb = "https://www.imdb.com/title/" + imdb[0]['imdbId']
+    if imdb[0]['imdbId']!=None:
+        resultimdb = "https://www.imdb.com/title/" + imdb[0]['imdbId']
+    else:
+        resultimdb=""
     length = [{resofMovie['headers'][4]: row[4]} for row in resofMovie['rows']]
     length = length[0]['length']
     collection = [{resofMovie['headers'][7]: row[7]} for row in resofMovie['rows']]

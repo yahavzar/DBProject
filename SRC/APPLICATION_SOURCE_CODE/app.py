@@ -21,5 +21,6 @@ app.register_blueprint(home_page)
 
 
 if __name__ == '__main__':
-   app.run(host="delta-tomcat-vm.cs.tau.ac.il", port="40494")
+   app.run()
+   #app.run(host="delta-tomcat-vm.cs.tau.ac.il", port="40494")
 
