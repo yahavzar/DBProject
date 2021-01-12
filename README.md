@@ -31,12 +31,9 @@ Deployment instructions:
     ```sh 
     $pip install --target='/specific/scratch/<userName>/python_package' -r requirements.txt
     $setenv PYTHONPATH /specific/scratch/<userName>/python_package
-    ```    
-8) 
-    ```sh 
     $cd SRC/APPLICATION_SOURCE_CODE
     ```    
-9) Run app.py
+8) Run app.py
     ```sh 
     $python3 app.py
     ```    
